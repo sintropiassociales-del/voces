@@ -110,12 +110,14 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="audio" aria-selected="true">Transcribir audio</button>
     <button role="tab" data-tab="texto" aria-selected="false">Traducir texto</button>
+    <button role="tab" data-tab="mem" aria-selected="false">Memoria de la lengua</button>
     <button role="tab" data-tab="prot" aria-selected="false">Protocolo</button>
     <button role="tab" data-tab="cfg" aria-selected="false">Configuración</button>
   </nav>
 </div></header>
 
 <main class="wrap">
+<div class="aviso" id="faltan" hidden style="border-left-color:var(--rojo)"></div>
 <div class="demo" id="demo" hidden>
   <div style="flex:1;min-width:240px"><b>Modo demostración.</b> Todavía no hay un backend conectado, así que no se puede procesar audio ni traducir. Puedes cargar un ejemplo para conocer el editor y la exportación a Word.</div>
   <button class="btn" id="btnDemo">Cargar ejemplo</button>
@@ -125,7 +127,7 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
 <!-- ============================================================ AUDIO -->
 <section class="tab on" id="tab-audio">
   <h2>Transcribir audio</h2><div class="regla"><s></s><u></u><s></s></div>
-  <p class="lead">Sube una grabación de entrevista, grupo focal o asamblea, de 40 minutos a 3 horas. La plataforma la divide en fragmentos, la transcribe con el protocolo académico y te entrega un borrador para revisar y exportar a Word, Google Docs o Google Sheets.</p>
+  <p class="lead">Sube una grabación de entrevista, grupo focal o asamblea, de 40 minutos a 3 horas. La plataforma la divide en bloques de 5 minutos y los transcribe uno por uno en segundo plano: si el servicio se satura, reintenta sola sin perder lo avanzado, y puedes cerrar la página mientras trabaja.</p>
 
   <div class="aviso" data-aviso></div>
 
@@ -145,13 +147,8 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
     <div class="grid2">
       <div class="card">
         <div class="paso">Paso 2</div><h3>Lengua del audio</h3>
-        <p class="nota">La etiqueta indica el error de caracteres que Meta publicó para su modelo más grande en audio de prueba. En entrevistas reales el error será mayor.</p>
         <div id="pickAudio"></div>
-        <div id="motorBox" hidden>
-          <label class="campo">Motor de transcripción</label>
-          <label class="radio"><input type="radio" name="motor" value="omni"> <span><b>Servidor de lenguas (Omnilingual ASR)</b> — recomendado. <span id="omniEstado" class="nota"></span></span></label>
-          <label class="radio"><input type="radio" name="motor" value="gemini"> <span><b>Gemini</b> — experimental para lenguas indígenas; puede inventar texto. Úsalo solo si no hay servidor de lenguas.</span></label>
-        </div>
+        <p class="nota" id="motorBox" hidden><b>Lengua indígena:</b> la transcripción la hace Gemini y es experimental. Puede equivocarse más que en español e incluso escribir palabras que no se dijeron, así que la revisión por una persona hablante es indispensable.</p>
       </div>
       <div class="card">
         <div class="paso">Paso 3</div><h3>Reglas de transcripción</h3>
@@ -178,10 +175,11 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
   <div class="card suave" id="progBox" hidden>
     <h3 id="progTit">Procesando</h3>
     <progress id="prog" max="100" value="0"></progress>
-    <div class="log" id="log" aria-live="polite"></div>
+    <p id="estado" style="font-weight:600;margin:8px 0 0" aria-live="polite"></p>
+    <div class="log" id="log"></div>
     <div class="fila" style="margin-top:10px">
-      <button class="btn" id="btnPausa">Pausar</button>
-      <button class="btn pri" id="btnSeguir" hidden>Reanudar</button>
+      <button class="btn pri" id="btnSeguir" hidden>Reintentar</button>
+      <button class="btn" id="btnPausa">Cancelar transcripción</button>
     </div>
   </div>
 
@@ -238,6 +236,51 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
   </div>
 </section>
 
+<!-- =========================================================== MEMORIA -->
+<section class="tab" id="tab-mem">
+  <h2>Memoria de la lengua</h2><div class="regla"><s></s><u></u><s></s></div>
+  <p class="lead">Aquí las personas hablantes enseñan a la plataforma. Las reglas de escritura, el glosario y los ejemplos validados se guardan en una hoja de cálculo del equipo y se envían a Gemini cada vez que transcribe o traduce esa lengua. Entre más se revisa y se guarda, más se acerca el borrador a como realmente se habla y se escribe.</p>
+  <div class="card">
+    <div class="fila">
+      <div style="flex:2;min-width:240px"><label class="campo" for="mLang" style="margin-top:0">Lengua</label><select id="mLang"></select></div>
+      <div style="flex:1;min-width:200px"><label class="campo" for="mQuien" style="margin-top:0">Tu nombre (queda registrado)</label><input type="text" id="mQuien"></div>
+      <div style="align-self:flex-end"><button class="btn" id="mVer">Actualizar</button></div>
+    </div>
+    <p class="nota" id="mRes" aria-live="polite"></p>
+  </div>
+  <div id="mCuerpo" hidden>
+    <div class="card suave">
+      <h3>Indicador de confiabilidad</h3>
+      <p class="nota">Cada vez que se guarda una revisión se compara el borrador automático con la versión corregida. "Similitud" es qué tan parecido quedó el borrador a lo que validó la persona hablante: si sube con el tiempo, la herramienta está mejorando para esta lengua.</p>
+      <div class="scroll"><table class="prot" id="mHist"></table></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Reglas de escritura y de traducción</h3>
+        <p class="nota">Instrucciones cortas y generales. Ejemplos: "Usa ts y no tz", "La glotal se escribe con apóstrofo recto", "No traduzcas literalmente 'buenos días'; se dice…".</p>
+        <ul id="mReglas"></ul>
+        <label class="campo" for="mRegla">Nueva regla</label>
+        <textarea id="mRegla" style="min-height:70px"></textarea>
+        <div class="fila" style="margin-top:8px"><button class="btn pri" id="mAddRegla">Guardar regla</button></div>
+      </div>
+      <div class="card">
+        <h3>Glosario <span class="nota" id="mNG"></span></h3>
+        <p class="nota">Palabras y expresiones con su significado. Sirve sobre todo para términos del proyecto, nombres de lugares y palabras que la plataforma suele escribir o traducir mal.</p>
+        <label class="campo" for="mTerm">Término en la lengua</label><input type="text" id="mTerm" spellcheck="false">
+        <label class="campo" for="mEsp">Significado en español</label><input type="text" id="mEsp">
+        <label class="campo" for="mVar">Variante o comunidad (opcional)</label><input type="text" id="mVar" list="mVars"><datalist id="mVars"></datalist>
+        <label class="campo" for="mNota">Nota de uso (opcional)</label><input type="text" id="mNota">
+        <div class="fila" style="margin-top:8px"><button class="btn pri" id="mAddGlos">Guardar término</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Últimos términos del glosario</h3>
+      <div class="scroll"><table class="prot" id="mGlos"></table></div>
+      <p class="nota" style="margin-top:10px"><span id="mNE"></span> Para corregir o borrar entradas, abre la hoja: <a id="mUrl" target="_blank" rel="noopener">Voces — Memoria de lenguas</a>.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ========================================================= PROTOCOLO -->
 <section class="tab" id="tab-prot">
   <h2>Protocolo de transcripción</h2><div class="regla"><s></s><u></u><s></s></div>
@@ -277,6 +320,7 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
       <li>En lenguas indígenas, corrige la ortografía según la norma que use la comunidad o el proyecto.</li>
       <li>Revisa la traducción frase por frase contra la lengua original, no contra el español que "suena bien".</li>
       <li>Al terminar, marca la casilla de revisión y escribe tu nombre. Así queda registrado en el documento exportado.</li>
+      <li>Pulsa "Guardar aprendizajes en la memoria de la lengua" para que tus correcciones mejoren los siguientes borradores.</li>
     </ol>
   </div>
 </section>
@@ -285,10 +329,10 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
 <section class="tab" id="tab-cfg">
   <h2>Configuración</h2><div class="regla"><s></s><u></u><s></s></div>
   <p class="lead">Estos datos se guardan solo en este navegador. Los pasos de instalación están en el archivo LEEME.md del repositorio.</p>
-  <div class="grid2">
+  <div style="max-width:620px">
     <div class="card">
       <h3>Backend (Google Apps Script)</h3>
-      <p class="nota">Transcribe en español, traduce y crea los Google Docs y Sheets.</p>
+      <p class="nota">Transcribe, traduce y crea los Google Docs y Sheets.</p>
       <label class="campo" for="cApi">URL de la aplicación web</label>
       <input type="url" id="cApi" placeholder="https://script.google.com/macros/s/…/exec">
       <label class="campo" for="cCode">Código de acceso</label>
@@ -296,15 +340,6 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
       <label class="campo" for="cMail">Tu correo de Google (para compartirte los Docs y Sheets)</label>
       <input type="email" id="cMail" placeholder="nombre@gmail.com">
       <div class="fila" style="margin-top:12px"><button class="btn pri" id="cProbar">Guardar y probar</button><span id="cRes" class="nota"></span></div>
-    </div>
-    <div class="card">
-      <h3>Servidor de lenguas (opcional)</h3>
-      <p class="nota">Transcribe audio en lenguas de Chiapas y Oaxaca con Omnilingual ASR. Si no se configura, la plataforma solo puede intentar esas lenguas con Gemini.</p>
-      <label class="campo" for="cSpace">URL del servidor</label>
-      <input type="url" id="cSpace" placeholder="https://usuario-voces-asr.hf.space">
-      <label class="campo" for="cSpaceCode">Código del servidor (si se definió)</label>
-      <input type="password" id="cSpaceCode" autocomplete="off">
-      <div class="fila" style="margin-top:12px"><button class="btn pri" id="cProbarS">Guardar y probar</button><span id="cResS" class="nota"></span></div>
     </div>
   </div>
 </section>
@@ -317,6 +352,11 @@ footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);f
 <script src="vendor/docx.umd.js"></script>
 <script>
 "use strict";
+/* Revisión de archivos: si falta alguno, se avisa en pantalla en lugar de fallar en silencio. */
+(function () {
+  const f = []; if (!window.LENGUAS) { f.push('langs.js'); window.LENGUAS = []; } if (!window.docx) f.push('vendor/docx.umd.js'); if (!window.VOCES_CONFIG) f.push('config.js');
+  if (f.length) { const d = document.getElementById('faltan'); d.hidden = false; d.innerHTML = '<h3 style="color:#9B0E18">Faltan archivos de la plataforma</h3><p>No se encontraron junto a index.html: <b>' + f.join(', ') + '</b>. Deben estar en la misma carpeta que index.html, con la carpeta <b>vendor</b> completa. Mientras falten, partes de la plataforma no funcionarán.</p>'; }
+})();
 /* ============================================================ utilidades */
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -338,12 +378,16 @@ if (window.VOCES_CONFIG) { for (const k of ['api', 'space']) if (!CFG[k] && wind
 function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
 function guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
 
-async function api(action, payload, intentos = 4) {
+async function api(action, payload, intentos = 4, limiteSeg = 0) {
   if (!CFG.api) throw new Error('No hay backend configurado.');
   let ultimo;
   for (let i = 0; i < intentos; i++) {
     try {
-      const r = await fetch(CFG.api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, code: CFG.code, ...payload }) });
+      const ctl = limiteSeg ? new AbortController() : null, reloj = ctl && setTimeout(() => ctl.abort(), limiteSeg * 1000);
+      let r;
+      try { r = await fetch(CFG.api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, code: CFG.code, ...payload }), signal: ctl ? ctl.signal : undefined }); }
+      catch (e) { throw e.name === 'AbortError' ? new Error('el backend no respondió en ' + limiteSeg + ' segundos') : e; }
+      finally { clearTimeout(reloj); }
       const j = await r.json();
       if (j.ok) return j;
       ultimo = new Error(j.msg || j.error || 'Error del backend');
@@ -464,21 +508,14 @@ function selector(el, { modo, conEsp, alCambiar, etiquetas }) {
 }
 
 /* ================================================================== audio */
-let PROJ = null, FILE = null, PAUSA = false, CORRIENDO = false, TROZOS = null;
-const pAudio = selector($('#pickAudio'), { modo: 'uno', conEsp: true, etiquetas: true, alCambiar: ajustaAudio });
+let PROJ = null, FILE = null, CORRIENDO = false, TROZOS = null;
+const pAudio = selector($('#pickAudio'), { modo: 'uno', conEsp: true, alCambiar: ajustaAudio });
 const pTrAudio = selector($('#pickTrAudio'), { modo: 'varios', alCambiar: ajustaAudio });
 
 function ajustaAudio() {
   const L = pAudio.valor()[0], esEsp = !L || L.code === 'spa';
   $('#trEspBox').hidden = esEsp;
   $('#motorBox').hidden = esEsp;
-  if (!esEsp) {
-    const puede = !!(CFG.space && L.omni);
-    const rO = $('input[name=motor][value=omni]'), rG = $('input[name=motor][value=gemini]');
-    rO.disabled = !puede;
-    $('#omniEstado').textContent = !L.omni ? 'Esta lengua no tiene modelo de voz en Omnilingual ASR.' : !CFG.space ? 'No está configurado (pestaña Configuración).' : 'Conectado.';
-    if (!puede) rG.checked = true; else if (!rG.checked) rO.checked = true;
-  }
   const listo = FILE && CFG.api;
   $('#btnRun').disabled = !listo;
   $('#runHint').textContent = !CFG.api ? 'Conecta el backend en Configuración para transcribir.' : !FILE ? 'Elige un archivo de audio.' : '';
@@ -505,8 +542,7 @@ async function tomaArchivo(f) {
   $('#fileInfo').innerHTML = `<b>${esc(f.name)}</b> · ${(f.size / 1048576).toFixed(1)} MB${d ? ' · duración ' + hms(d) : ''}` + (d > 3 * 3600 + 300 ? ' · <span class="mal">supera las 3 horas recomendadas; puede tardar mucho.</span>' : '');
   if (!$('#titulo').value) $('#titulo').value = f.name.replace(/\.[^.]+$/, '');
   $('#player').src = URL.createObjectURL(f);
-  if (PROJ && PROJ.rows.length && PROJ.fileName === f.name) { ajustaAudio(); return; }
-  ajustaAudio();
+    ajustaAudio();
 }
 
 /* ---------------------------------------------------- corte del audio */
@@ -516,13 +552,15 @@ async function cargaFF(log) {
   log('Cargando el cortador de audio (solo la primera vez, unos 30 MB)…');
   const { FFmpeg } = await import('./vendor/ffmpeg/index.js');
   const f = new FFmpeg();
-  const base = new URL('./vendor/ffmpeg/', location.href).href;
+  let base = new URL('./vendor/ffmpeg/', location.href).href;
+  try { const h = await fetch(base + 'ffmpeg-core.wasm', { method: 'HEAD' }); if (!h.ok) throw 0; }
+  catch (e) { base = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm/'; log('El archivo ffmpeg-core.wasm no está en el repositorio; se descargará de una copia pública.'); }
   await f.load({ coreURL: base + 'ffmpeg-core.js', wasmURL: base + 'ffmpeg-core.wasm' });
   ff = f; return ff;
 }
 /** Divide el audio. Devuelve {n, seg, mime, ext, leer(i) -> Blob}. */
 async function cortar(file, motor, log, prog) {
-  const cfg = motor === 'omni' ? { seg: 28, ext: 'flac', mime: 'audio/flac', args: ['-c:a', 'flac'] } : { seg: 480, ext: 'mp3', mime: 'audio/mp3', args: ['-c:a', 'libmp3lame', '-b:a', '32k'] };
+  const cfg = motor === 'omni' ? { seg: 28, ext: 'flac', mime: 'audio/flac', args: ['-c:a', 'flac'] } : { seg: 300, ext: 'mp3', mime: 'audio/mp3', args: ['-c:a', 'libmp3lame', '-b:a', '32k'] };
   try {
     const f = await cargaFF(log);
     log('Dividiendo el audio en fragmentos de ' + (cfg.seg >= 60 ? cfg.seg / 60 + ' minutos' : cfg.seg + ' segundos') + '…');
@@ -571,58 +609,94 @@ const logEl = $('#log');
 const log = m => { logEl.textContent += (logEl.textContent ? '\n' : '') + m; logEl.scrollTop = logEl.scrollHeight; };
 
 $('#btnRun').onclick = async () => {
+  if (PROJ && PROJ.fase === 'subir' && PROJ.jobId) return procesar();
   const L = pAudio.valor()[0];
   if (!L) return alert('Elige la lengua del audio.');
   const esEsp = L.code === 'spa';
-  const motor = esEsp ? 'gemini' : ($('input[name=motor]:checked') || {}).value || 'gemini';
+  const motor = 'gemini';
   const cols = [];
   if (!esEsp && $('#trEsp').checked) cols.push({ key: 'spa', code: 'spa', name: 'Español', variant: '', label: 'Español' });
   pTrAudio.valor().forEach(d => { if (!(d.code === L.code && !d.variant)) cols.push(d); });
   PROJ = {
     v: 1, kind: 'audio', title: $('#titulo').value.trim() || FILE.name, fileName: FILE.name, dur: FILE.dur || 0, lang: L, motor,
     opts: { mode: $('input[name=modo]:checked').value, anonymize: $('#anon').checked, speakers: +$('#nhab').value || 0 },
-    cols, rows: [], hecho: 0, total: 0, reviewed: false, reviewer: '', reviewDate: '', creado: new Date().toISOString()
+    cols, rows: [], hecho: 0, total: 0, fase: 'subir', jobId: '', subidos: 0, recibidos: 0, reviewed: false, reviewer: '', reviewDate: '', creado: new Date().toISOString()
   };
-  TROZOS = null; logEl.textContent = '';
+  TROZOS = null; logEl.textContent = ''; setEstado('');
   await procesar();
 };
-$('#btnPausa').onclick = () => { PAUSA = true; $('#btnPausa').disabled = true; log('Se pausará al terminar el fragmento en curso…'); };
+const setEstado = t => { $('#estado').textContent = t; };
+$('#btnPausa').onclick = async () => {
+  const P = PROJ; if (!P) return;
+  if (!confirm('Se cancelará la transcripción. Los turnos que ya aparecen abajo se conservan. ¿Continuar?')) return;
+  SALIR = true;
+  if (P.jobId) { try { await api('jobCancel', { jobId: P.jobId }, 1, 60); } catch (e) { } }
+  P.fase = 'listo'; P.cancelado = true; autosave();
+  $('#progBox').hidden = true; pintaCabecera();
+};
 $('#btnSeguir').onclick = () => procesar();
+let SALIR = false;
 
+/**
+ * Etapa 1 (necesita el archivo): cortar el audio y entregar los bloques al backend.
+ * Etapa 2 (ya no necesita el archivo ni esta página): el backend transcribe bloque por bloque.
+ * Mientras la página está abierta, ella empuja el trabajo y va mostrando los turnos.
+ */
 async function procesar() {
-  if (CORRIENDO) return; CORRIENDO = true; PAUSA = false;
-  $('#prep').hidden = true; $('#progBox').hidden = false; $('#btnSeguir').hidden = true; $('#btnPausa').hidden = false; $('#btnPausa').disabled = false;
+  if (CORRIENDO) return; CORRIENDO = true; SALIR = false;
   const bar = $('#prog'), P = PROJ;
+  $('#progBox').hidden = false; $('#btnSeguir').hidden = true; $('#btnPausa').hidden = false;
   try {
-    if (!FILE) throw new Error('Vuelve a elegir el archivo de audio "' + P.fileName + '" para continuar.');
-    if (!TROZOS) { $('#progTit').textContent = 'Preparando el audio'; TROZOS = await cortar(FILE, P.motor, log, f => bar.value = f * 100); P.total = TROZOS.n; P.seg = TROZOS.seg; }
-    $('#progTit').textContent = 'Transcribiendo'; pintaEditor(); $('#editor').hidden = false;
-    for (let i = P.hecho; i < TROZOS.n; i++) {
-      if (PAUSA) break;
-      bar.value = i / TROZOS.n * 100;
-      const ini = i * TROZOS.seg;
-      log(`Fragmento ${i + 1} de ${TROZOS.n} (desde ${hms(ini)})…`);
-      const blob = await TROZOS.leer(i);
-      let nuevos = [];
-      if (P.motor === 'omni') {
-        const t = (await espacio(blob, P.lang.omni, 'f.' + TROZOS.ext)).trim();
-        if (t) nuevos = [{ t: ini, speaker: 'P?', text: t, tr: {} }];
-      } else {
-        const labels = [...new Set(P.rows.map(r => r.speaker))];
-        const r = await api('transcribe', { audio: await b64(blob), mime: TROZOS.mime, lang: P.lang, opts: P.opts, context: { labels, prev: P.rows.slice(-3).map(x => ({ speaker: x.speaker, text: x.text })) } });
-        nuevos = r.segments.map(s => ({ t: ini + Math.min(s.t, TROZOS.seg), speaker: s.speaker, text: s.text, tr: {} }));
+    if (P.fase === 'subir') {
+      if (!FILE) throw Object.assign(new Error('Elige de nuevo el archivo "' + P.fileName + '" (Paso 1) y pulsa Reintentar.'), { pideArchivo: true });
+      $('#prep').hidden = true;
+      if (!TROZOS) { $('#progTit').textContent = 'Preparando el audio'; setEstado('Dividiendo el audio en bloques de 5 minutos…'); TROZOS = await cortar(FILE, 'gemini', log, f => bar.value = f * 100); P.total = TROZOS.n; P.seg = TROZOS.seg; }
+      if (!P.jobId) {
+        const r = await api('jobCreate', { meta: { title: P.title, lang: P.lang, opts: P.opts, cols: P.cols.map(c => ({ key: c.key, name: c.name, code: c.code, variant: c.variant })), total: TROZOS.n, seg: TROZOS.seg, mime: TROZOS.mime, ext: TROZOS.ext, email: CFG.mail, url: location.href.split('?')[0] } });
+        P.jobId = r.jobId; P.subidos = 0; autosave();
       }
-      const desde = P.rows.length;
-      P.rows.push(...nuevos); P.hecho = i + 1;
-      if (P.cols.length && nuevos.length) { try { await traduceFilas(P, P.rows.slice(desde).map((_, k) => desde + k)); } catch (e) { log('La traducción de este fragmento falló (' + e.message + '). Podrás traducirlo después con "Traducir filas pendientes".'); } }
-      agregaFilas(desde); autosave();
+      $('#progTit').textContent = 'Entregando el audio';
+      for (let i = P.subidos; i < TROZOS.n; i++) {
+        if (SALIR) throw new Error('Cancelado.');
+        setEstado(`Entregando bloque ${i + 1} de ${TROZOS.n}. No cierres la página todavía.`); bar.value = i / TROZOS.n * 100;
+        await api('jobChunk', { jobId: P.jobId, i, audio: await b64(await TROZOS.leer(i)) });
+        P.subidos = i + 1; autosave();
+      }
+      await api('jobStart', { jobId: P.jobId });
+      P.fase = 'proceso'; autosave();
+      if (ff) { try { ff.terminate(); } catch (e) { } ff = null; } TROZOS = null;
+      log('Audio entregado completo (' + P.total + ' bloques). Desde aquí el trabajo sigue en segundo plano: puedes cerrar la página y volver después' + (CFG.mail ? '; te avisaremos por correo al terminar.' : '.'));
     }
-    if (P.hecho >= TROZOS.n) { bar.value = 100; log('Listo. Revisa el borrador y exporta.'); $('#progBox').hidden = true; if (ff) { try { ff.terminate(); } catch (e) { } ff = null; } }
-    else { log('En pausa.'); $('#btnSeguir').hidden = false; $('#btnPausa').hidden = true; }
+    $('#prep').hidden = true; $('#progTit').textContent = 'Transcribiendo en segundo plano'; $('#editor').hidden = false; pintaEditor();
+    let sinRed = 0;
+    while (P.fase === 'proceso' && !SALIR) {
+      let r;
+      try { r = await api('jobWork', { jobId: P.jobId, desde: P.recibidos || 0 }, 1, 345); sinRed = 0; }
+      catch (e) {
+        if (e.fatal || /No existe ese trabajo|no válido|incompleto/i.test(e.message)) throw e;
+        sinRed++; setEstado('Sin respuesta del backend (' + e.message + '). El trabajo sigue en segundo plano; se vuelve a consultar en un momento.');
+        await espera(Math.min(60000, 8000 * sinRed)); continue;
+      }
+      if (r.rows && r.rows.length) {
+        const desde = P.rows.length;
+        P.rows.push(...r.rows.map(x => ({ t: x.t, speaker: x.speaker, text: x.text, tr: x.tr || {}, o: x.text, otr: { ...(x.tr || {}) } })));
+        P.recibidos = (P.recibidos || 0) + r.rows.length; agregaFilas(desde);
+      }
+      P.hecho = r.hecho; P.total = r.total; bar.value = r.total ? r.hecho / r.total * 100 : 0; autosave(); pintaCabecera();
+      if (r.estado === 'listo') { P.fase = 'listo'; break; }
+      if (r.estado === 'error') throw new Error('El backend detuvo el trabajo tras muchos intentos: ' + r.error);
+      if (r.esperaSeg > 0) {
+        setEstado(`Bloque ${r.hecho + 1} de ${r.total}: el servicio está saturado o sin cuota. Reintento automático en ${Math.ceil(r.esperaSeg / 60)} min; lo avanzado está guardado y puedes cerrar la página. Detalle: ${String(r.error).replace(/^Gemini no respondió\. Último error: /, '')}`);
+        await espera(Math.min(r.esperaSeg * 1000 + 1500, 30000));
+      } else if (r.ocupado) { setEstado(`Bloque ${r.hecho + 1} de ${r.total} en proceso…`); await espera(10000); }
+      else setEstado(`Bloque ${r.hecho} de ${r.total} listo. Transcribiendo el siguiente…`);
+    }
+    if (P.fase === 'listo') { autosave(); setEstado(''); $('#progBox').hidden = true; pintaCabecera(); }
   } catch (e) {
-    log('Se detuvo: ' + e.message + '\nLo ya transcrito está guardado. Pulsa "Reanudar" para continuar desde el fragmento ' + ((P.hecho || 0) + 1) + '.');
-    $('#btnSeguir').hidden = false; $('#btnPausa').hidden = true;
-    if (!P.rows.length && !TROZOS) { $('#prep').hidden = false; }
+    setEstado('Se detuvo: ' + e.message);
+    if (P.fase === 'subir') { $('#btnSeguir').hidden = false; if (e.pideArchivo || !FILE) $('#prep').hidden = false; }
+    else if (/No existe ese trabajo|no válido|incompleto|detuvo el trabajo/i.test(e.message)) { P.fase = 'listo'; autosave(); $('#btnPausa').hidden = true; }
+    else $('#btnSeguir').hidden = false;
   }
   CORRIENDO = false; pintaCabecera();
 }
@@ -641,7 +715,7 @@ async function traduceFilas(P, idx, avisa) {
   for (let k = 0; k < lotes.length; k++) {
     avisa && avisa(k, lotes.length);
     const r = await api('translate', { source: fuente, targets: P.cols.map(c => ({ key: c.key, name: c.name, code: c.code, variant: c.variant })), items: lotes[k].map(i => ({ id: i, text: P.rows[i].text })) });
-    for (const it of r.items) if (P.rows[it.id]) Object.assign(P.rows[it.id].tr, it.tr);
+    for (const it of r.items) if (P.rows[it.id]) { Object.assign(P.rows[it.id].tr, it.tr); P.rows[it.id].otr = { ...(P.rows[it.id].otr || {}), ...it.tr }; }
   }
   avisa && avisa(lotes.length, lotes.length);
 }
@@ -653,7 +727,7 @@ function pintaCabecera() {
   const P = PROJ;
   $('#edTit').textContent = P.title;
   const motor = P.motor === 'omni' ? 'Omnilingual ASR' : P.motor === 'demo' ? 'ejemplo' : 'Gemini';
-  $('#edMeta').textContent = `${P.lang.label || P.lang.name} · ${P.rows.length} turnos · motor: ${motor}` + (P.total && P.hecho < P.total ? ` · avance ${P.hecho} de ${P.total} fragmentos` : '');
+  $('#edMeta').textContent = `${P.lang.label || P.lang.name} · ${P.rows.length} turnos · motor: ${motor}` + (P.total && P.hecho < P.total && !P.cancelado ? ` · avance ${P.hecho} de ${P.total} bloques` : '');
   const labs = [...new Set(P.rows.map(r => r.speaker))];
   $('#hab').innerHTML = labs.map(l => `<input type="text" value="${esc(l)}" data-lab="${esc(l)}" aria-label="Etiqueta de hablante ${esc(l)}">`).join('') || '<span class="nota">Aún no hay turnos.</span>';
   const n = P.rows.reduce((a, r) => a + cuentaRojo(r.text) + P.cols.reduce((b, c) => b + cuentaRojo(r.tr[c.key]), 0), 0);
@@ -703,24 +777,26 @@ async function retraduce(todo) {
   if (!idx.length) return alert('No hay filas pendientes de traducir.');
   if (todo && !confirm('Se reemplazarán las traducciones actuales, incluidas las correcciones hechas a mano. ¿Continuar?')) return;
   if (todo) idx.forEach(i => P.rows[i].tr = {});
-  $('#progBox').hidden = false; $('#progTit').textContent = 'Traduciendo'; $('#btnPausa').hidden = true; $('#btnSeguir').hidden = true;
+  if (CORRIENDO) return alert('Espera a que termine la transcripción.');
+  $('#progBox').hidden = false; $('#progTit').textContent = 'Traduciendo'; setEstado(''); $('#btnPausa').hidden = true; $('#btnSeguir').hidden = true;
   try { await traduceFilas(P, idx, (k, n) => { $('#prog').value = k / n * 100; }); log('Traducción actualizada.'); $('#progBox').hidden = true; }
   catch (e) { log('La traducción se detuvo: ' + e.message); }
   pintaEditor(); autosave();
 }
 $('#btnTrPend').onclick = () => retraduce(false);
 $('#btnTrTodo').onclick = () => retraduce(true);
-$('#btnNuevo').onclick = () => { if (!confirm('Se cerrará este documento. Guárdalo o expórtalo antes. ¿Continuar?')) return; PROJ = null; FILE = null; TROZOS = null; localStorage.removeItem('voces_proj'); $('#editor').hidden = true; $('#progBox').hidden = true; $('#prep').hidden = false; $('#fileInfo').textContent = ''; $('#titulo').value = ''; fileIn.value = ''; pTrAudio.limpiar(); $('#player').removeAttribute('src'); ajustaAudio(); };
+$('#btnNuevo').onclick = async () => { if (!confirm('Se cerrará este documento. Guárdalo o expórtalo antes.' + (PROJ && PROJ.fase === 'proceso' ? ' La transcripción en curso se cancelará.' : '') + ' ¿Continuar?')) return; SALIR = true; if (PROJ && PROJ.jobId && PROJ.fase !== 'listo') { try { await api('jobCancel', { jobId: PROJ.jobId }, 1, 60); } catch (e) { } } PROJ = null; FILE = null; TROZOS = null; localStorage.removeItem('voces_proj'); $('#editor').hidden = true; $('#progBox').hidden = true; $('#prep').hidden = false; $('#fileInfo').textContent = ''; $('#titulo').value = ''; fileIn.value = ''; pTrAudio.limpiar(); $('#player').removeAttribute('src'); ajustaAudio(); };
 
 function autosave() { if (PROJ && !guardar('voces_proj', PROJ)) console.warn('No se pudo autoguardar (almacenamiento lleno).'); }
 function abreProyecto(P) {
   if (!P || !Array.isArray(P.rows)) return alert('El archivo no es un proyecto de Voces.');
   if (P.kind === 'texto') { TX = P; pintaTexto(); irA('texto'); return; }
+  if (!P.fase) P.fase = 'listo';                    // proyectos de versiones anteriores
   PROJ = P; $('#prep').hidden = true; $('#editor').hidden = false; pintaEditor(); irA('audio');
-  if (P.total && P.hecho < P.total) {
-    $('#progBox').hidden = false; $('#progTit').textContent = 'Transcripción incompleta'; $('#btnPausa').hidden = true; $('#btnSeguir').hidden = false; logEl.textContent = '';
-    log(`Este proyecto quedó en el fragmento ${P.hecho} de ${P.total}. Para continuar, elige de nuevo el archivo "${P.fileName}" y pulsa Reanudar.`);
-    $('#prep').hidden = false;
+  if (P.fase === 'proceso' && CFG.api) { logEl.textContent = ''; log('Retomando el seguimiento del trabajo en segundo plano…'); procesar(); }
+  else if (P.fase === 'subir') {
+    $('#progBox').hidden = false; $('#progTit').textContent = 'Entrega del audio incompleta'; $('#btnSeguir').hidden = false; $('#prep').hidden = false;
+    setEstado(`Faltó entregar parte del audio. Elige de nuevo el archivo "${P.fileName}" en el Paso 1 y pulsa Reintentar.`);
   }
 }
 $('#btnAbrir').onclick = () => $('#fileProj').click();
@@ -735,7 +811,10 @@ function pintaRevision(k) {
   el.innerHTML = `<div class="card"><h3>Revisión por una persona hablante</h3>
     <p class="nota">Mientras esta casilla no esté marcada, el documento exportado dirá "Revisión pendiente".</p>
     <label class="radio"><input type="checkbox"> <span>Una persona hablante de la lengua ya revisó la transcripción y la traducción</span></label>
-    <label class="campo">Nombre de quien revisó</label><input type="text" style="max-width:420px" placeholder="Nombre y comunidad o variante que habla"></div>`;
+    <label class="campo">Nombre de quien revisó</label><input type="text" style="max-width:420px" placeholder="Nombre y comunidad o variante que habla">
+    <div class="fila" style="margin-top:14px"><button class="btn pri" data-aprender>Guardar aprendizajes en la memoria de la lengua</button><span class="nota apr" aria-live="polite"></span></div>
+    <p class="nota">Al guardar, las frases ya revisadas (sin marcas en rojo) pasan a la memoria y servirán de ejemplo en las siguientes transcripciones y traducciones de esa lengua.</p></div>`;
+  $('[data-aprender]', el).onclick = () => aprender(k, $('.apr', el));
   const c = $('input[type=checkbox]', el), n = $('input[type=text]', el);
   c.checked = !!P.reviewed; n.value = P.reviewer || '';
   const up = () => { const Q = proyecto(k); Q.reviewed = c.checked; Q.reviewer = n.value.trim(); Q.reviewDate = c.checked ? hoy() : ''; k === 'audio' ? autosave() : guardar('voces_tx', Q); };
@@ -820,7 +899,7 @@ function ajustaTexto() {
 $('#txIn').oninput = ajustaTexto;
 $('#btnTx').onclick = async () => {
   const parrafos = $('#txIn').value.split(/\n+/).map(s => s.trim()).filter(Boolean);
-  TX = { v: 1, kind: 'texto', title: $('#txTitulo').value.trim() || 'Traducción ' + hoy(), cols: pTexto.valor(), rows: parrafos.map(t => ({ text: t, tr: {} })), reviewed: false, reviewer: '', reviewDate: '' };
+  TX = { v: 2, kind: 'texto', title: $('#txTitulo').value.trim() || 'Traducción ' + hoy(), cols: pTexto.valor(), rows: parrafos.map(t => ({ text: t, tr: {} })), reviewed: false, reviewer: '', reviewDate: '' };
   $('#txProg').hidden = false; $('#txLog').textContent = 'Traduciendo…'; $('#btnTx').disabled = true;
   try { await traduceFilas(TX, TX.rows.map((_, i) => i), (k, n) => { $('#txBar').value = k / n * 100; $('#txLog').textContent = `Lote ${Math.min(k + 1, n)} de ${n}…`; }); $('#txProg').hidden = true; }
   catch (e) { $('#txLog').textContent = 'La traducción se detuvo: ' + e.message + ' Lo ya traducido se conserva abajo.'; }
@@ -838,27 +917,102 @@ function pintaTexto() {
 $('#txTabla').addEventListener('focusin', e => { const d = e.target.closest('.ed'); if (d) { const r = TX.rows[d.closest('tr').dataset.i]; d.textContent = d.dataset.k === 'text' ? r.text : (r.tr[d.dataset.k] || ''); } });
 $('#txTabla').addEventListener('focusout', e => { const d = e.target.closest('.ed'); if (!d) return; const r = TX.rows[d.closest('tr').dataset.i], v = d.innerText.replace(/\n+$/, ''); if (d.dataset.k === 'text') r.text = v; else r.tr[d.dataset.k] = v; d.innerHTML = pinta(v); guardar('voces_tx', TX); });
 
+/* ================================================================ memoria */
+function similitud(a, b) {
+  a = String(a || '').slice(0, 500); b = String(b || '').slice(0, 500);
+  if (a === b) return 1; if (!a.length || !b.length) return 0;
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) { const cur = [i]; for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+  return 1 - prev[b.length] / Math.max(a.length, b.length);
+}
+/** Reúne lo que la revisión enseña: frases validadas y qué tanto cambió el borrador. */
+function aprendizajes(P) {
+  const pares = [], stats = [], limpio = t => t && t.trim() && !cuentaRojo(t);
+  const mide = (code, name, filas) => { if (!filas.length) return; const ig = filas.filter(f => f[0] === f[1]).length, s = filas.reduce((a, f) => a + similitud(f[0], f[1]), 0); stats.push({ code, name, turnos: filas.length, iguales: ig, sim: Math.round(s / filas.length * 100) }); };
+  const audioInd = P.kind === 'audio' && P.lang.code !== 'spa';
+  if (audioInd) {
+    const filas = [];
+    for (const r of P.rows) { if (!r.text || !r.text.trim()) continue; const o = r.o ?? r.text; filas.push([o, r.text]); if (limpio(r.text)) pares.push({ code: P.lang.code, name: P.lang.name, variante: P.lang.variant || '', tipo: o !== r.text ? 'transcripción corregida' : 'transcripción validada', borrador: o !== r.text ? o : '', lengua: r.text, esp: limpio(r.tr.spa) ? r.tr.spa : '' }); }
+    mide(P.lang.code, P.lang.name + ' (transcripción)', filas);
+  }
+  for (const c of P.cols) {
+    if (!c.code || c.code === 'spa') continue;
+    const filas = [];
+    for (const r of P.rows) {
+      const v = r.tr[c.key], esp = (P.kind === 'texto' || P.lang.code === 'spa') ? r.text : r.tr.spa; if (!v || !v.trim()) continue;
+      const o = (r.otr || {})[c.key] ?? v; filas.push([o, v]);
+      if (limpio(v) && limpio(esp)) pares.push({ code: c.code, name: c.name, variante: c.variant || '', tipo: 'traducción', borrador: o !== v ? o : '', lengua: v, esp });
+    }
+    mide(c.code, c.label + ' (traducción)', filas);
+  }
+  return { pares: pares.filter(p => p.lengua.length <= 600).slice(0, 200), stats };
+}
+async function aprender(k, out) {
+  const P = proyecto(k); if (!P) return;
+  if (!CFG.api) return out.textContent = 'Requiere el backend conectado.';
+  if (!P.reviewed || !P.reviewer) return out.innerHTML = '<span class="mal">Primero marca la casilla de revisión y escribe el nombre de quien revisó.</span>';
+  if (P.aprendido && !confirm('Este documento ya se guardó en la memoria. Guardarlo otra vez duplicará sus ejemplos. ¿Continuar?')) return;
+  const a = aprendizajes(P);
+  if (!a.pares.length && !a.stats.length) return out.textContent = 'Este documento no tiene texto en lenguas indígenas que guardar.';
+  out.textContent = 'Guardando…';
+  try {
+    const r = await api('memAprender', { doc: P.title, quien: P.reviewer, pares: a.pares, stats: a.stats }, 1, 200);
+    P.aprendido = true; k === 'audio' ? autosave() : guardar('voces_tx', P);
+    out.innerHTML = `<span class="ok">Guardado: ${r.guardados} frases validadas.</span> ` + a.stats.map(s => `${esc(s.name)}: ${s.sim}% de similitud entre el borrador y la versión revisada (${s.iguales} de ${s.turnos} turnos sin cambios).`).join(' ');
+  } catch (e) { out.innerHTML = '<span class="mal">No se pudo guardar: ' + esc(e.message) + '</span>'; }
+}
+const mLang = $('#mLang');
+mLang.innerHTML = window.LENGUAS.map(l => `<option value="${l.c}"${l.c === 'tzo' ? ' selected' : ''}>${esc(l.n)} — ${esc(l.s)}</option>`).join('');
+$('#mQuien').value = (leer('voces_nombre') || '');
+$('#mQuien').onchange = () => guardar('voces_nombre', $('#mQuien').value.trim());
+const mLengua = () => { const l = window.LENGUAS.find(x => x.c === mLang.value); return l ? { code: l.c, name: l.n } : null; };
+function pintaMem(j) {
+  $('#mCuerpo').hidden = false; $('#mUrl').href = j.url;
+  $('#mHist').innerHTML = '<tr><th>Fecha</th><th>Documento</th><th>Turnos</th><th>Sin cambios</th><th>Similitud</th><th>Revisó</th></tr>' + (j.historial.length ? j.historial.map(h => `<tr><td>${esc(h.fecha)}</td><td>${esc(h.doc)}</td><td>${esc(h.turnos)}</td><td>${h.turnos ? Math.round(h.iguales / h.turnos * 100) : 0}%</td><td><b>${esc(h.sim)}%</b></td><td>${esc(h.quien)}</td></tr>`).join('') : '<tr><td colspan="6">Todavía no hay revisiones guardadas para esta lengua.</td></tr>');
+  $('#mReglas').innerHTML = j.reglas.length ? j.reglas.map(r => `<li>${esc(r)}</li>`).join('') : '<li class="nota">Sin reglas todavía.</li>';
+  $('#mGlos').innerHTML = '<tr><th>Término</th><th>Español</th><th>Variante</th><th>Nota</th></tr>' + (j.glosario.length ? j.glosario.map(g => `<tr><td><b>${esc(g.termino)}</b></td><td>${esc(g.esp)}</td><td>${esc(g.variante)}</td><td>${esc(g.nota)}</td></tr>`).join('') : '<tr><td colspan="4">Glosario vacío.</td></tr>');
+  $('#mNG').textContent = '(' + j.nGlosario + (j.nGlosario === 1 ? ' término)' : ' términos)'); $('#mNE').textContent = j.nEjemplos + ' frases validadas guardadas.';
+  $('#mVars').innerHTML = (VARIANTES[mLang.value] || []).map(v => `<option value="${esc(v)}">`).join('');
+}
+async function cargaMem() {
+  const r = $('#mRes'); if (!CFG.api) { r.textContent = 'Conecta el backend en Configuración para usar la memoria.'; return; }
+  r.textContent = 'Consultando…';
+  try { pintaMem(await api('memGet', { codeLang: mLang.value }, 1, 120)); r.textContent = ''; } catch (e) { r.innerHTML = '<span class="mal">' + esc(e.message) + '</span>'; }
+}
+async function sumaMem(datos, limpiar) {
+  const r = $('#mRes'), L = mLengua();
+  if (!$('#mQuien').value.trim()) { r.innerHTML = '<span class="mal">Escribe tu nombre para registrar quién aporta.</span>'; $('#mQuien').focus(); return; }
+  r.textContent = 'Guardando…';
+  try { pintaMem(await api('memAdd', { ...datos, lang: L, quien: $('#mQuien').value.trim(), email: CFG.mail }, 1, 120)); r.innerHTML = '<span class="ok">Guardado.</span> Se usará desde la siguiente transcripción o traducción.'; limpiar(); }
+  catch (e) { r.innerHTML = '<span class="mal">' + esc(e.message) + '</span>'; }
+}
+mLang.onchange = cargaMem; $('#mVer').onclick = cargaMem;
+$('nav.tabs button[data-tab=mem]').addEventListener('click', () => { if ($('#mCuerpo').hidden) cargaMem(); });
+$('#mAddRegla').onclick = () => sumaMem({ tipo: 'regla', regla: $('#mRegla').value }, () => $('#mRegla').value = '');
+$('#mAddGlos').onclick = () => sumaMem({ tipo: 'glosario', termino: $('#mTerm').value, esp: $('#mEsp').value, variante: $('#mVar').value, nota: $('#mNota').value }, () => { $('#mTerm').value = $('#mEsp').value = $('#mNota').value = ''; $('#mTerm').focus(); });
+
 /* =========================================================== configuración */
 function pintaCfg() {
-  $('#cApi').value = CFG.api; $('#cCode').value = CFG.code; $('#cMail').value = CFG.mail; $('#cSpace').value = CFG.space; $('#cSpaceCode').value = CFG.spaceCode;
+  $('#cApi').value = CFG.api; $('#cCode').value = CFG.code; $('#cMail').value = CFG.mail;
   $('#demo').hidden = !!CFG.api;
   ajustaAudio(); ajustaTexto(); if (PROJ) pintaCabecera(); if (TX) pintaExport('texto');
 }
 function tomaCfg() {
-  CFG.api = $('#cApi').value.trim(); CFG.code = $('#cCode').value; CFG.mail = $('#cMail').value.trim(); CFG.space = $('#cSpace').value.trim().replace(/\/+$/, ''); CFG.spaceCode = $('#cSpaceCode').value;
+  CFG.api = $('#cApi').value.trim(); CFG.code = $('#cCode').value; CFG.mail = $('#cMail').value.trim();
   guardar('voces_cfg', CFG); pintaCfg();
 }
 $('#cProbar').onclick = async () => {
   tomaCfg(); const r = $('#cRes'); if (!CFG.api) { r.innerHTML = '<span class="mal">Escribe la URL.</span>'; return; }
-  r.textContent = 'Probando…';
-  try { const j = await api('ping', {}, 1); r.innerHTML = `<span class="ok">Conectado.</span> Modelo en uso: ${esc(j.modelo)}.`; }
-  catch (e) { r.innerHTML = '<span class="mal">No conecta: ' + esc(e.message) + '</span>'; }
-};
-$('#cProbarS').onclick = async () => {
-  tomaCfg(); const r = $('#cResS'); if (!CFG.space) { r.textContent = 'Sin servidor de lenguas.'; return; }
-  r.textContent = 'Probando (si el servidor estaba dormido puede tardar unos minutos)…';
-  try { const j = await (await fetch(CFG.space + '/health')).json(); r.innerHTML = j.ready ? `<span class="ok">Conectado.</span> Modelo: ${esc(j.model)}.` : 'El servidor está cargando el modelo. Intenta de nuevo en unos minutos.'; }
-  catch (e) { r.innerHTML = '<span class="mal">No responde: ' + esc(e.message) + '</span>'; }
+  const b = $('#cProbar'); b.disabled = true;
+  let seg = 0, etapa = 'Paso 1 de 2: revisando el backend y la clave', tic = setInterval(() => { seg++; r.textContent = etapa + '… ' + seg + ' s'; }, 1000);
+  r.textContent = etapa + '…';
+  try {
+    const j = await api('ping', {}, 1, 60);
+    etapa = 'Paso 1 correcto. Paso 2 de 2: pidiendo una respuesta a Gemini (puede tardar hasta 4 minutos)'; seg = 0;
+    try { const m = await api('pingModelo', {}, 1, 280); r.innerHTML = `<span class="ok">Conectado.</span> Modelo en uso: ${esc(m.modelo)} (respondió en ${m.segundos} s).`; }
+    catch (e) { r.innerHTML = '<span class="mal">El backend y la clave funcionan, pero Gemini no respondió: ' + esc(e.message) + '</span>' + (j.modelos && j.modelos.length ? ' Modelos que se intentan: ' + esc(j.modelos.join(', ')) + '.' : ''); }
+  } catch (e) { r.innerHTML = '<span class="mal">No conecta: ' + esc(e.message) + '</span>'; }
+  clearInterval(tic); b.disabled = false;
 };
 
 /* ================================================================= ejemplo */
@@ -882,7 +1036,7 @@ $('#btnDemo').onclick = () => {
 /* ================================================================== inicio */
 pintaCfg();
 (function restaura() {
-  const p = leer('voces_proj'); if (p && p.rows && p.rows.length && p.motor !== 'demo') abreProyecto(p), irA('audio');
+  const p = leer('voces_proj'); if (p && p.rows && p.motor !== 'demo' && (p.rows.length || p.jobId)) abreProyecto(p), irA('audio');
   const t = leer('voces_tx'); if (t && t.rows && t.rows.length) { TX = t; pintaTexto(); }
 })();
 window.addEventListener('beforeunload', e => { if (CORRIENDO) { e.preventDefault(); e.returnValue = ''; } });
