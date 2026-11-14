@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voces · Sintropía Social</title>
+<meta name="description" content="Transcripción académica de audios y traducción entre español y lenguas de Chiapas y Oaxaca.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236B21F5'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23FF6B1A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--morado:#6B21F5;--morado-osc:#4A12B8;--morado-claro:#F3EDFF;--naranja:#FF6B1A;--naranja-claro:#FFF1E8;--rojo:#D4111E;--tinta:#1C1530;--gris:#5B556B;--linea:#E3DDF0;--fondo:#FFFFFF;--suave:#FAF8FE}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--tinta);background:var(--fondo);font-size:16px;line-height:1.55}
+h1,h2,h3{font-family:Montserrat,"Open Sans",sans-serif;margin:0;line-height:1.2;text-wrap:balance}
+h2{font-size:1.5rem;font-weight:800}
+h3{font-size:1.02rem;font-weight:700}
+p{margin:.4rem 0}
+a{color:var(--morado)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--linea);background:#fff;position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-top:12px;padding-bottom:0}
+.marca{display:flex;align-items:baseline;gap:10px;padding-bottom:12px}
+.marca b{font-family:Montserrat,sans-serif;font-weight:800;font-size:1.45rem;color:var(--morado);letter-spacing:-.01em}
+.marca span{font-size:.8rem;color:var(--gris);font-weight:600}
+.marca i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--naranja)}
+nav.tabs{display:flex;gap:2px;margin-left:auto;overflow-x:auto}
+nav.tabs button{font:600 .92rem "Open Sans",sans-serif;background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px 13px;color:var(--gris);cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected=true]{color:var(--morado);border-bottom-color:var(--naranja)}
+nav.tabs button:hover{color:var(--morado)}
+main{padding:28px 0 80px}
+section.tab{display:none}
+section.tab.on{display:block}
+.regla{display:flex;align-items:center;gap:6px;margin:10px 0 18px}
+.regla s{display:block;height:3px;width:34px;background:var(--morado);border-radius:2px}
+.regla u{display:block;height:7px;width:7px;background:var(--naranja);border-radius:50%}
+.lead{color:var(--gris);max-width:68ch}
+.card{border:1px solid var(--linea);border-radius:12px;padding:20px;background:#fff;margin:16px 0}
+.card.suave{background:var(--suave)}
+.paso{font:700 .72rem Montserrat,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--naranja);margin-bottom:4px}
+.aviso{border-left:5px solid var(--naranja);background:var(--naranja-claro);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0}
+.aviso h3{color:#8A3200;margin-bottom:4px}
+.aviso ol{margin:6px 0 0;padding-left:20px}
+.aviso li{margin:3px 0}
+.nota{font-size:.86rem;color:var(--gris)}
+.demo{background:var(--morado-claro);border:1px solid #D9C8FF;border-radius:10px;padding:12px 16px;margin:0 0 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}}
+label.campo{display:block;font-weight:600;font-size:.88rem;margin:12px 0 4px}
+input[type=text],input[type=url],input[type=email],input[type=password],input[type=number],select,textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid #CFC6E2;border-radius:8px;background:#fff;color:var(--tinta)}
+textarea{min-height:190px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--morado);outline-offset:1px}
+.btn{font:700 .92rem "Open Sans",sans-serif;border-radius:8px;border:2px solid var(--morado);background:#fff;color:var(--morado);padding:9px 16px;cursor:pointer}
+.btn:hover{background:var(--morado-claro)}
+.btn.pri{background:var(--morado);color:#fff}
+.btn.pri:hover{background:var(--morado-osc);border-color:var(--morado-osc)}
+.btn.acc{background:var(--naranja);border-color:var(--naranja);color:#fff}
+.btn.acc:hover{background:#E65A0D;border-color:#E65A0D}
+.btn.min{padding:4px 9px;font-size:.8rem;border-width:1px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.drop{border:2px dashed #BBA7EE;border-radius:12px;padding:30px 18px;text-align:center;background:var(--suave);cursor:pointer}
+.drop.sobre{background:var(--morado-claro);border-color:var(--morado)}
+.drop b{font-family:Montserrat,sans-serif;color:var(--morado)}
+.pick{border:1px solid var(--linea);border-radius:10px;overflow:hidden}
+.pick input.busca{border:0;border-bottom:1px solid var(--linea);border-radius:0}
+.pick .lista{max-height:250px;overflow:auto;padding:6px 10px 10px}
+.pick h4{font:700 .7rem Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--morado);margin:12px 0 4px}
+.pick h5{font:700 .8rem "Open Sans",sans-serif;color:var(--gris);margin:8px 0 2px}
+.pick label{display:flex;gap:8px;align-items:baseline;padding:2px 0;font-size:.9rem;cursor:pointer}
+.pick .vars{margin:2px 0 6px 26px;padding-left:10px;border-left:2px solid var(--naranja)}
+.tag{font-size:.68rem;font-weight:700;border-radius:20px;padding:1px 7px;white-space:nowrap}
+.tag.a{background:#E4F6EA;color:#17603A}.tag.m{background:#FFF3D6;color:#7A5200}.tag.b{background:#FDE5E7;color:#9B0E18}.tag.x{background:#ECEAF1;color:#5B556B}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{background:var(--morado-claro);color:var(--morado-osc);border-radius:20px;padding:3px 10px;font-size:.82rem;font-weight:600}
+.radio{display:flex;gap:8px;align-items:baseline;margin:5px 0;font-size:.92rem}
+progress{width:100%;height:12px;accent-color:var(--morado)}
+.log{font-size:.84rem;color:var(--gris);max-height:120px;overflow:auto;margin-top:6px;white-space:pre-wrap}
+.barra{position:sticky;top:58px;z-index:10;background:#fff;border:1px solid var(--linea);border-radius:10px;padding:10px 14px;margin:14px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.barra audio{height:36px;flex:1;min-width:220px}
+.pend{font-weight:700;color:var(--rojo);font-size:.88rem}
+.tabla{width:100%;border-collapse:collapse;table-layout:fixed}
+.tabla th{font:700 .74rem Montserrat,sans-serif;letter-spacing:.05em;text-transform:uppercase;text-align:left;color:#fff;background:var(--morado);padding:8px 10px;position:sticky;top:0}
+.tabla td{border-bottom:1px solid var(--linea);padding:6px 8px;vertical-align:top;font-size:.93rem}
+.tabla td.t{width:86px}.tabla th.t{width:86px}.tabla th.h{width:128px}.tabla th.x{width:62px}
+.tabla td.t button{font:600 .8rem ui-monospace,Menlo,monospace;background:none;border:0;color:var(--morado);cursor:pointer;padding:4px 0;text-decoration:underline}
+.tabla input.sp{width:100%;padding:4px 6px;font-size:.85rem;font-weight:700}
+.ed{min-height:1.5em;padding:4px 6px;border-radius:6px;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid transparent}
+.ed:hover{border-color:var(--linea)}
+.ed:focus{border-color:var(--morado);background:var(--suave)}
+.ed.tr{font-style:italic;color:#33294F}
+.rojo{color:var(--rojo);font-weight:700}
+.scroll{overflow-x:auto;border:1px solid var(--linea);border-radius:10px}
+.hab{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hab input{width:150px;padding:5px 8px;font-size:.85rem;font-weight:700}
+table.prot{width:100%;border-collapse:collapse;font-size:.92rem}
+table.prot th{background:var(--morado);color:#fff;text-align:left;padding:8px 10px;font:700 .76rem Montserrat,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+table.prot td{border-bottom:1px solid var(--linea);padding:8px 10px;vertical-align:top}
+table.prot code{font:600 .9rem ui-monospace,Menlo,monospace;background:var(--suave);padding:1px 5px;border-radius:4px;white-space:nowrap}
+.ok{color:#17603A;font-weight:700}.mal{color:var(--rojo);font-weight:700}
+footer{border-top:1px solid var(--linea);padding:18px 0 30px;color:var(--gris);font-size:.82rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="marca"><b>Voces</b><i></i><span>Sintropía Social</span></div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="audio" aria-selected="true">Transcribir audio</button>
+    <button role="tab" data-tab="texto" aria-selected="false">Traducir texto</button>
+    <button role="tab" data-tab="prot" aria-selected="false">Protocolo</button>
+    <button role="tab" data-tab="cfg" aria-selected="false">Configuración</button>
+  </nav>
+</div></header>
+
+<main class="wrap">
+<div class="demo" id="demo" hidden>
+  <div style="flex:1;min-width:240px"><b>Modo demostración.</b> Todavía no hay un backend conectado, así que no se puede procesar audio ni traducir. Puedes cargar un ejemplo para conocer el editor y la exportación a Word.</div>
+  <button class="btn" id="btnDemo">Cargar ejemplo</button>
+  <button class="btn pri" data-ir="cfg">Conectar backend</button>
+</div>
+
+<!-- ============================================================ AUDIO -->
+<section class="tab on" id="tab-audio">
+  <h2>Transcribir audio</h2><div class="regla"><s></s><u></u><s></s></div>
+  <p class="lead">Sube una grabación de entrevista, grupo focal o asamblea, de 40 minutos a 3 horas. La plataforma la divide en fragmentos, la transcribe con el protocolo académico y te entrega un borrador para revisar y exportar a Word, Google Docs o Google Sheets.</p>
+
+  <div class="aviso" data-aviso></div>
+
+  <div id="prep">
+    <div class="card">
+      <div class="paso">Paso 1</div><h3>Audio</h3>
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Elegir archivo de audio">
+        <b>Arrastra aquí el archivo</b> o haz clic para elegirlo<br>
+        <span class="nota">MP3, M4A, WAV, OGG, OPUS, AAC, FLAC o video MP4. El archivo se divide en tu navegador; no se guarda en ningún servidor.</span>
+      </div>
+      <input type="file" id="file" accept="audio/*,video/mp4,.m4a,.opus,.ogg,.amr,.flac" hidden>
+      <p id="fileInfo" class="nota"></p>
+      <label class="campo" for="titulo">Título del documento</label>
+      <input type="text" id="titulo" placeholder="Ej. Entrevista 03 — comunidad, fecha">
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="paso">Paso 2</div><h3>Lengua del audio</h3>
+        <p class="nota">La etiqueta indica el error de caracteres que Meta publicó para su modelo más grande en audio de prueba. En entrevistas reales el error será mayor.</p>
+        <div id="pickAudio"></div>
+        <div id="motorBox" hidden>
+          <label class="campo">Motor de transcripción</label>
+          <label class="radio"><input type="radio" name="motor" value="omni"> <span><b>Servidor de lenguas (Omnilingual ASR)</b> — recomendado. <span id="omniEstado" class="nota"></span></span></label>
+          <label class="radio"><input type="radio" name="motor" value="gemini"> <span><b>Gemini</b> — experimental para lenguas indígenas; puede inventar texto. Úsalo solo si no hay servidor de lenguas.</span></label>
+        </div>
+      </div>
+      <div class="card">
+        <div class="paso">Paso 3</div><h3>Reglas de transcripción</h3>
+        <label class="radio"><input type="radio" name="modo" value="literal" checked> <span><b>Literal</b> — conserva muletillas, repeticiones y falsos comienzos. Es la opción académica por defecto.</span></label>
+        <label class="radio"><input type="radio" name="modo" value="depurada"> <span><b>Literal depurada</b> — mismo contenido, sin muletillas repetidas.</span></label>
+        <label class="radio"><input type="checkbox" id="anon"> <span>Anonimizar nombres de personas y localidades pequeñas</span></label>
+        <label class="campo" for="nhab">Personas que hablan (aproximado, opcional)</label>
+        <input type="number" id="nhab" min="1" max="20" style="max-width:120px">
+        <h3 style="margin-top:18px">Traducción</h3>
+        <p class="nota">Elige una o varias lenguas o variantes. Cada una será una columna.</p>
+        <label class="radio" id="trEspBox" hidden><input type="checkbox" id="trEsp" checked> <span><b>Español</b></span></label>
+        <div id="pickTrAudio"></div>
+      </div>
+    </div>
+
+    <div class="fila">
+      <button class="btn pri" id="btnRun" disabled>Transcribir</button>
+      <button class="btn" id="btnAbrir">Abrir proyecto guardado</button>
+      <input type="file" id="fileProj" accept=".json,application/json" hidden>
+      <span class="nota" id="runHint"></span>
+    </div>
+  </div>
+
+  <div class="card suave" id="progBox" hidden>
+    <h3 id="progTit">Procesando</h3>
+    <progress id="prog" max="100" value="0"></progress>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="fila" style="margin-top:10px">
+      <button class="btn" id="btnPausa">Pausar</button>
+      <button class="btn pri" id="btnSeguir" hidden>Reanudar</button>
+    </div>
+  </div>
+
+  <div id="editor" hidden>
+    <div class="barra">
+      <audio id="player" controls preload="metadata"></audio>
+      <span class="pend" id="pend"></span>
+      <button class="btn min" id="btnSig">Siguiente marca en rojo</button>
+    </div>
+    <div class="card">
+      <div class="fila" style="justify-content:space-between">
+        <h3 id="edTit"></h3>
+        <button class="btn min" id="btnNuevo">Nuevo audio</button>
+      </div>
+      <p class="nota" id="edMeta"></p>
+      <label class="campo">Hablantes (cambiar una etiqueta la cambia en todo el documento)</label>
+      <div class="hab" id="hab"></div>
+      <div class="fila" style="margin-top:12px">
+        <button class="btn min" id="btnTrPend">Traducir filas pendientes</button>
+        <button class="btn min" id="btnTrTodo">Volver a traducir todo</button>
+        <span class="nota">Usa "Volver a traducir" después de corregir la transcripción.</span>
+      </div>
+    </div>
+    <div class="scroll"><table class="tabla" id="tabla"></table></div>
+    <div data-revision="audio"></div>
+    <div data-export="audio"></div>
+  </div>
+</section>
+
+<!-- ============================================================ TEXTO -->
+<section class="tab" id="tab-texto">
+  <h2>Traducir texto del español a una lengua</h2><div class="regla"><s></s><u></u><s></s></div>
+  <p class="lead">Escribe o pega tu texto en español y elige una o varias lenguas o variantes de Chiapas y Oaxaca. Recibirás un borrador de traducción por cada una, párrafo por párrafo, para que una persona hablante lo revise.</p>
+  <div class="aviso" data-aviso></div>
+  <div class="grid2">
+    <div class="card">
+      <label class="campo" for="txTitulo" style="margin-top:0">Título del documento</label>
+      <input type="text" id="txTitulo" placeholder="Ej. Carta de consentimiento informado">
+      <label class="campo" for="txIn">Texto en español</label>
+      <textarea id="txIn" placeholder="Escribe o pega aquí. Cada párrafo se traduce por separado."></textarea>
+    </div>
+    <div class="card">
+      <h3>Lenguas de destino</h3>
+      <p class="nota">Puedes elegir varias. En tsotsil puedes elegir una o varias variantes; cada una genera su propia columna.</p>
+      <div id="pickTexto"></div>
+    </div>
+  </div>
+  <div class="fila"><button class="btn pri" id="btnTx" disabled>Traducir</button><span class="nota" id="txHint"></span></div>
+  <div class="card suave" id="txProg" hidden><progress id="txBar" max="100" value="0"></progress><div class="log" id="txLog" aria-live="polite"></div></div>
+  <div id="txOut" hidden>
+    <div class="scroll" style="margin-top:18px"><table class="tabla" id="txTabla"></table></div>
+    <div data-revision="texto"></div>
+    <div data-export="texto"></div>
+  </div>
+</section>
+
+<!-- ========================================================= PROTOCOLO -->
+<section class="tab" id="tab-prot">
+  <h2>Protocolo de transcripción</h2><div class="regla"><s></s><u></u><s></s></div>
+  <p class="lead">Protocolo Sintropía para investigación cualitativa, basado en una versión simplificada del sistema de Gail Jefferson. Busca que la transcripción sea fiel al habla, legible y verificable contra el audio.</p>
+  <div class="card">
+    <h3>Principios</h3>
+    <ol>
+      <li><b>Fidelidad.</b> Se escribe lo que la persona dijo y como lo dijo. No se corrige gramática, vocabulario ni regionalismos.</li>
+      <li><b>Nada se inventa.</b> Lo que no se oye se marca como inaudible; lo dudoso se marca como dudoso. Ambas marcas salen en rojo.</li>
+      <li><b>Un turno por intervención</b>, con la hora de inicio y una etiqueta de hablante constante en todo el documento.</li>
+      <li><b>La lengua original manda.</b> La traducción acompaña a la transcripción, nunca la sustituye.</li>
+      <li><b>Revisión por una persona hablante</b> antes de usar, citar o publicar cualquier texto.</li>
+    </ol>
+  </div>
+  <div class="scroll"><table class="prot">
+    <tr><th style="width:190px">Marca</th><th>Significado</th><th>Ejemplo</th></tr>
+    <tr><td><code>[00:12:34]</code></td><td>Hora de inicio del turno (horas, minutos, segundos).</td><td>[00:12:34] P1: Pues así empezamos.</td></tr>
+    <tr><td><code>E1</code> <code>E2</code></td><td>Persona que entrevista o facilita.</td><td>E1: ¿Y cómo se organizaron?</td></tr>
+    <tr><td><code>P1</code> <code>P2</code></td><td>Persona participante. La etiqueta puede cambiarse por un seudónimo.</td><td>P2: Entre todas lo decidimos.</td></tr>
+    <tr><td><code class="rojo">[inaudible]</code></td><td>Fragmento que no se entiende. Sale en rojo.</td><td>Fuimos a <span class="rojo">[inaudible]</span> y regresamos.</td></tr>
+    <tr><td><code class="rojo">(¿palabra?)</code></td><td>Palabra o frase dudosa. Sale en rojo.</td><td>Lo vimos en <span class="rojo">(¿Oxchuc?)</span>.</td></tr>
+    <tr><td><code>(.)</code> <code>(..)</code> <code>(5)</code></td><td>Pausa breve (menos de un segundo), media (uno a tres) y larga (segundos entre paréntesis).</td><td>Yo creo que (..) no era así.</td></tr>
+    <tr><td><code>((risas))</code></td><td>Evento no verbal o del entorno: risas, llanto, suspiro, tos, ruido, interrupción.</td><td>Y se cayó ((risas)).</td></tr>
+    <tr><td><code>pala-</code></td><td>Palabra cortada o autointerrupción.</td><td>Cuan- cuando llegamos.</td></tr>
+    <tr><td><code>no::</code></td><td>Alargamiento de un sonido.</td><td>No:: pues quién sabe.</td></tr>
+    <tr><td><code>MAYÚSCULAS</code></td><td>Énfasis o volumen alto.</td><td>Eso NO se permite.</td></tr>
+    <tr><td><code>//</code></td><td>Punto donde dos personas empiezan a hablar a la vez.</td><td>P1: Era en mayo // creo.<br>P2: // En junio.</td></tr>
+    <tr><td><code>«esp: …»</code></td><td>Cambio de lengua dentro del turno, con el código de la lengua.</td><td>… «esp: la presidencia municipal» …</td></tr>
+    <tr><td><code>[NOMBRE]</code> <code>[LUGAR]</code></td><td>Dato anonimizado (opcional).</td><td>Me lo dijo [NOMBRE].</td></tr>
+  </table></div>
+  <div class="card">
+    <h3>Guía para quien revisa</h3>
+    <ol>
+      <li>Escucha el audio completo con la transcripción a la vista. Haz clic en la hora de cada turno para ir a ese punto.</li>
+      <li>Resuelve primero las marcas en rojo: corrige el texto y borra la marca, o déjala si de verdad no se entiende.</li>
+      <li>Revisa que cada turno tenga la etiqueta de la persona correcta.</li>
+      <li>En lenguas indígenas, corrige la ortografía según la norma que use la comunidad o el proyecto.</li>
+      <li>Revisa la traducción frase por frase contra la lengua original, no contra el español que "suena bien".</li>
+      <li>Al terminar, marca la casilla de revisión y escribe tu nombre. Así queda registrado en el documento exportado.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================================================== CONFIGURACIÓN -->
+<section class="tab" id="tab-cfg">
+  <h2>Configuración</h2><div class="regla"><s></s><u></u><s></s></div>
+  <p class="lead">Estos datos se guardan solo en este navegador. Los pasos de instalación están en el archivo LEEME.md del repositorio.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>Backend (Google Apps Script)</h3>
+      <p class="nota">Transcribe en español, traduce y crea los Google Docs y Sheets.</p>
+      <label class="campo" for="cApi">URL de la aplicación web</label>
+      <input type="url" id="cApi" placeholder="https://script.google.com/macros/s/…/exec">
+      <label class="campo" for="cCode">Código de acceso</label>
+      <input type="password" id="cCode" autocomplete="off">
+      <label class="campo" for="cMail">Tu correo de Google (para compartirte los Docs y Sheets)</label>
+      <input type="email" id="cMail" placeholder="nombre@gmail.com">
+      <div class="fila" style="margin-top:12px"><button class="btn pri" id="cProbar">Guardar y probar</button><span id="cRes" class="nota"></span></div>
+    </div>
+    <div class="card">
+      <h3>Servidor de lenguas (opcional)</h3>
+      <p class="nota">Transcribe audio en lenguas de Chiapas y Oaxaca con Omnilingual ASR. Si no se configura, la plataforma solo puede intentar esas lenguas con Gemini.</p>
+      <label class="campo" for="cSpace">URL del servidor</label>
+      <input type="url" id="cSpace" placeholder="https://usuario-voces-asr.hf.space">
+      <label class="campo" for="cSpaceCode">Código del servidor (si se definió)</label>
+      <input type="password" id="cSpaceCode" autocomplete="off">
+      <div class="fila" style="margin-top:12px"><button class="btn pri" id="cProbarS">Guardar y probar</button><span id="cResS" class="nota"></span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Voces · Sintropía Social. Los resultados son borradores automáticos que requieren revisión por una persona hablante.</div></footer>
+
+<script src="config.js"></script>
+<script src="langs.js"></script>
+<script src="vendor/docx.umd.js"></script>
+<script>
+"use strict";
+/* ============================================================ utilidades */
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const RE_ROJO = /\[inaudible[^\]]*\]|\(¿[^)]*\?\)/gi;
+const pinta = t => esc(t).replace(RE_ROJO, m => '<span class="rojo">' + m + '</span>');
+const cuentaRojo = t => (String(t || '').match(RE_ROJO) || []).length;
+const hms = s => { s = Math.max(0, Math.round(s || 0)); const p = n => String(n).padStart(2, '0'); return p(Math.floor(s / 3600)) + ':' + p(Math.floor(s % 3600 / 60)) + ':' + p(s % 60); };
+const slug = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const espera = ms => new Promise(r => setTimeout(r, ms));
+const hoy = () => new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+const AVISO = 'Borrador generado automáticamente. La plataforma puede cometer errores de transcripción y de traducción. Todo el texto debe ser revisado por una persona hablante de la lengua antes de usarse, citarse o publicarse.';
+const CONVENCIONES = 'Convenciones: [inaudible] no se entiende · (¿palabra?) dudosa · (.) (..) (N) pausas · ((risas)) evento no verbal · pala- corte · no:: alargamiento · MAYÚSCULAS énfasis · // traslape · «esp: …» cambio de lengua. El texto en rojo requiere verificación.';
+const VARIANTES = { tzo: ['San Juan Chamula', 'Zinacantán', 'San Andrés Larráinzar', 'Chenalhó', 'Huixtán', 'Venustiano Carranza (San Bartolomé de los Llanos)'] };
+const ESP = { c: 'spa', o: 'spa_Latn', n: 'Español', f: 'Español', s: '' };
+
+/* ========================================================= configuración */
+const CFG = Object.assign({ api: '', code: '', mail: '', space: '', spaceCode: '' }, window.VOCES_CONFIG || {}, leer('voces_cfg') || {});
+if (window.VOCES_CONFIG) { for (const k of ['api', 'space']) if (!CFG[k] && window.VOCES_CONFIG[k]) CFG[k] = window.VOCES_CONFIG[k]; }
+function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function guardar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+
+async function api(action, payload, intentos = 4) {
+  if (!CFG.api) throw new Error('No hay backend configurado.');
+  let ultimo;
+  for (let i = 0; i < intentos; i++) {
+    try {
+      const r = await fetch(CFG.api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, code: CFG.code, ...payload }) });
+      const j = await r.json();
+      if (j.ok) return j;
+      ultimo = new Error(j.msg || j.error || 'Error del backend');
+      if (['CODIGO', 'SIN_CLAVE', 'ACCION'].includes(j.error) || /clave|permiso/i.test(ultimo.message)) throw Object.assign(ultimo, { fatal: true });
+    } catch (e) { if (e.fatal) throw e; ultimo = e; }
+    if (i < intentos - 1) await espera([6000, 25000, 65000][i] || 65000);
+  }
+  throw ultimo;
+}
+
+async function espacio(blob, lang, nombre) {
+  let ultimo;
+  for (let i = 0; i < 6; i++) {
+    try {
+      const fd = new FormData(); fd.append('file', blob, nombre); fd.append('lang', lang); fd.append('code', CFG.spaceCode || '');
+      const r = await fetch(CFG.space.replace(/\/+$/, '') + '/transcribe', { method: 'POST', body: fd });
+      if (r.status === 401) throw Object.assign(new Error('Código del servidor de lenguas incorrecto.'), { fatal: true });
+      if (!r.ok) throw new Error('Servidor de lenguas: ' + r.status);
+      const j = await r.json(); if (j.error) throw new Error(j.error);
+      return j.text || '';
+    } catch (e) { if (e.fatal) throw e; ultimo = e; }
+    await espera([5000, 20000, 45000, 60000, 60000][i] || 60000);
+  }
+  throw ultimo;
+}
+
+/* ================================================================ pestañas */
+function irA(t) {
+  $$('nav.tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t));
+  $$('section.tab').forEach(s => s.classList.toggle('on', s.id === 'tab-' + t));
+  window.scrollTo(0, 0);
+}
+$$('nav.tabs button').forEach(b => b.onclick = () => irA(b.dataset.tab));
+$$('[data-ir]').forEach(b => b.onclick = () => irA(b.dataset.ir));
+$$('[data-aviso]').forEach(d => d.innerHTML = `<h3>Datos fundamentales antes de usar el resultado</h3><ol>
+<li><b>La plataforma puede cometer errores</b> de transcripción y de traducción, sobre todo en lenguas indígenas, donde los modelos han tenido menos material para aprender.</li>
+<li><b>Toda transcripción y toda traducción debe ser revisada por una persona hablante de la lengua</b> antes de usarse, citarse o publicarse. El resultado es un borrador de trabajo.</li>
+<li>Lo que aparece en <span class="rojo">rojo</span> no se entendió o es dudoso y debe verificarse contra el audio.</li>
+<li>El audio y los textos se envían a servicios externos para procesarse. Verifica que el consentimiento de las personas participantes lo permita.</li></ol>`);
+
+/* ====================================================== selector de lenguas */
+function calidad(l) {
+  if (!l.o) return '<span class="tag x">solo texto</span>';
+  if (l.e <= 5) return `<span class="tag a">error ${l.e}%</span>`;
+  if (l.e <= 15) return `<span class="tag m">error ${l.e}%</span>`;
+  return `<span class="tag b">error ${l.e}%</span>`;
+}
+/** Selector con búsqueda. modo 'uno' (lengua del audio) o 'varios' (destinos). */
+function selector(el, { modo, conEsp, alCambiar, etiquetas }) {
+  const id = 'p' + Math.random().toString(36).slice(2, 7);
+  const sel = new Map();          // key -> destino
+  let libres = [];
+  el.innerHTML = `<div class="pick"><input type="text" class="busca" placeholder="Buscar lengua, variante o estado" aria-label="Buscar lengua"><div class="lista"></div></div>
+    ${modo === 'varios' ? `<div class="fila" style="margin-top:8px"><input type="text" class="otra" placeholder="Otra lengua o variante (escríbela)" style="flex:1;min-width:180px"><button class="btn min" type="button">Agregar</button></div>` : `<label class="campo">Variante o comunidad (opcional)</label><input type="text" class="varlibre" placeholder="Ej. Tenejapa, Juchitán">`}
+    <div class="chips"></div>`;
+  const lista = $('.lista', el), busca = $('.busca', el), chips = $('.chips', el);
+  const tipo = modo === 'uno' ? 'radio' : 'checkbox';
+
+  function pintar() {
+    const q = slug(busca.value);
+    let h = '', est = '', fam = '';
+    if (conEsp && (!q || 'espanol'.includes(q))) h += `<label><input type="${tipo}" name="${id}" value="spa"> <span><b>Español</b></span></label>`;
+    for (const l of window.LENGUAS) {
+      if (q && !slug(l.n + ' ' + l.f + ' ' + l.s + ' ' + l.c).includes(q)) continue;
+      if (l.s !== est) { est = l.s; fam = ''; h += `<h4>${esc(est)}</h4>`; }
+      const grupo = window.LENGUAS.filter(x => x.f === l.f && x.s === l.s).length > 1;
+      if (grupo && l.f !== fam) { fam = l.f; h += `<h5>${esc(fam)}</h5>`; }
+      h += `<label><input type="${tipo}" name="${id}" value="${l.c}"> <span>${esc(l.n)} ${etiquetas ? calidad(l) : ''}</span></label>`;
+      if (VARIANTES[l.c]) h += `<div class="vars" data-vars="${l.c}" hidden><div class="nota">${modo === 'uno' ? 'Variante del audio (una o varias):' : 'Variantes (cada una será una columna; sin marcar = tsotsil general):'}</div>` +
+        VARIANTES[l.c].map(v => `<label><input type="checkbox" data-var="${l.c}" value="${esc(v)}"> <span>${esc(v)}</span></label>`).join('') + `</div>`;
+    }
+    lista.innerHTML = h || '<p class="nota">Sin resultados.</p>';
+    sincronizar();
+  }
+  function sincronizar() {
+    $$(`input[name="${id}"]`, lista).forEach(i => { i.checked = [...sel.values()].some(d => d.code === i.value); });
+    $$('[data-vars]', lista).forEach(d => { d.hidden = ![...sel.values()].some(x => x.code === d.dataset.vars); });
+    $$('input[data-var]', lista).forEach(i => { i.checked = [...sel.values()].some(d => d.code === i.dataset.var && (d.vars || []).includes(i.value)); });
+    const ds = valor();
+    chips.innerHTML = ds.map(d => `<span class="chip">${esc(d.label)}</span>`).join('');
+  }
+  function base(code) { const l = code === 'spa' ? ESP : window.LENGUAS.find(x => x.c === code); return { code, name: l.n, omni: l.o, e: l.e, vars: [] }; }
+  lista.addEventListener('change', ev => {
+    const i = ev.target;
+    if (i.name === id) {
+      if (modo === 'uno') { sel.clear(); sel.set(i.value, base(i.value)); }
+      else if (i.checked) sel.set(i.value, base(i.value)); else sel.delete(i.value);
+    } else if (i.dataset.var) {
+      const d = sel.get(i.dataset.var); if (!d) return;
+      d.vars = i.checked ? [...d.vars, i.value] : d.vars.filter(v => v !== i.value);
+    }
+    sincronizar(); alCambiar && alCambiar();
+  });
+  busca.oninput = pintar;
+  if (modo === 'varios') {
+    const inp = $('.otra', el), add = () => { const v = inp.value.trim(); if (!v) return; libres.push(v); inp.value = ''; sincronizar(); alCambiar && alCambiar(); };
+    $('.fila button', el).onclick = add; inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); add(); } };
+    chips.onclick = e => { const t = e.target.textContent; if (libres.includes(t)) { libres = libres.filter(x => x !== t); sincronizar(); alCambiar && alCambiar(); } };
+  } else $('.varlibre', el).oninput = () => alCambiar && alCambiar();
+
+  /** Lista de destinos: en modo 'varios', cada variante marcada es un destino propio. */
+  function valor() {
+    const out = [];
+    for (const d of sel.values()) {
+      if (modo === 'uno') {
+        const libre = ($('.varlibre', el).value || '').trim();
+        const variant = [...d.vars, libre].filter(Boolean).join(', ');
+        out.push({ key: d.code, code: d.code, name: d.name, omni: d.omni, e: d.e, variant, label: d.name + (variant ? ' — ' + variant : '') });
+      } else if (d.vars.length) d.vars.forEach(v => out.push({ key: d.code + '-' + slug(v), code: d.code, name: d.name, variant: v, label: d.name + ' — ' + v }));
+      else out.push({ key: d.code, code: d.code, name: d.name, variant: '', label: d.name });
+    }
+    libres.forEach(v => out.push({ key: 'x-' + slug(v), code: '', name: v, variant: '', label: v }));
+    return out;
+  }
+  if (modo === 'uno' && conEsp) sel.set('spa', base('spa'));
+  pintar();
+  return { valor, limpiar() { sel.clear(); libres = []; pintar(); } };
+}
+
+/* ================================================================== audio */
+let PROJ = null, FILE = null, PAUSA = false, CORRIENDO = false, TROZOS = null;
+const pAudio = selector($('#pickAudio'), { modo: 'uno', conEsp: true, etiquetas: true, alCambiar: ajustaAudio });
+const pTrAudio = selector($('#pickTrAudio'), { modo: 'varios', alCambiar: ajustaAudio });
+
+function ajustaAudio() {
+  const L = pAudio.valor()[0], esEsp = !L || L.code === 'spa';
+  $('#trEspBox').hidden = esEsp;
+  $('#motorBox').hidden = esEsp;
+  if (!esEsp) {
+    const puede = !!(CFG.space && L.omni);
+    const rO = $('input[name=motor][value=omni]'), rG = $('input[name=motor][value=gemini]');
+    rO.disabled = !puede;
+    $('#omniEstado').textContent = !L.omni ? 'Esta lengua no tiene modelo de voz en Omnilingual ASR.' : !CFG.space ? 'No está configurado (pestaña Configuración).' : 'Conectado.';
+    if (!puede) rG.checked = true; else if (!rG.checked) rO.checked = true;
+  }
+  const listo = FILE && CFG.api;
+  $('#btnRun').disabled = !listo;
+  $('#runHint').textContent = !CFG.api ? 'Conecta el backend en Configuración para transcribir.' : !FILE ? 'Elige un archivo de audio.' : '';
+}
+
+const drop = $('#drop'), fileIn = $('#file');
+drop.onclick = () => fileIn.click();
+drop.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileIn.click(); } };
+drop.ondragover = e => { e.preventDefault(); drop.classList.add('sobre'); };
+drop.ondragleave = () => drop.classList.remove('sobre');
+drop.ondrop = e => { e.preventDefault(); drop.classList.remove('sobre'); if (e.dataTransfer.files[0]) tomaArchivo(e.dataTransfer.files[0]); };
+fileIn.onchange = () => fileIn.files[0] && tomaArchivo(fileIn.files[0]);
+
+function duracion(file) {
+  return new Promise(res => {
+    const a = document.createElement('audio'); a.preload = 'metadata';
+    a.onloadedmetadata = () => res(isFinite(a.duration) ? a.duration : 0); a.onerror = () => res(0);
+    a.src = URL.createObjectURL(file);
+  });
+}
+async function tomaArchivo(f) {
+  FILE = f; TROZOS = null;
+  const d = await duracion(f); FILE.dur = d;
+  $('#fileInfo').innerHTML = `<b>${esc(f.name)}</b> · ${(f.size / 1048576).toFixed(1)} MB${d ? ' · duración ' + hms(d) : ''}` + (d > 3 * 3600 + 300 ? ' · <span class="mal">supera las 3 horas recomendadas; puede tardar mucho.</span>' : '');
+  if (!$('#titulo').value) $('#titulo').value = f.name.replace(/\.[^.]+$/, '');
+  $('#player').src = URL.createObjectURL(f);
+  if (PROJ && PROJ.rows.length && PROJ.fileName === f.name) { ajustaAudio(); return; }
+  ajustaAudio();
+}
+
+/* ---------------------------------------------------- corte del audio */
+let ff = null;
+async function cargaFF(log) {
+  if (ff) return ff;
+  log('Cargando el cortador de audio (solo la primera vez, unos 30 MB)…');
+  const { FFmpeg } = await import('./vendor/ffmpeg/index.js');
+  const f = new FFmpeg();
+  const base = new URL('./vendor/ffmpeg/', location.href).href;
+  await f.load({ coreURL: base + 'ffmpeg-core.js', wasmURL: base + 'ffmpeg-core.wasm' });
+  ff = f; return ff;
+}
+/** Divide el audio. Devuelve {n, seg, mime, ext, leer(i) -> Blob}. */
+async function cortar(file, motor, log, prog) {
+  const cfg = motor === 'omni' ? { seg: 28, ext: 'flac', mime: 'audio/flac', args: ['-c:a', 'flac'] } : { seg: 480, ext: 'mp3', mime: 'audio/mp3', args: ['-c:a', 'libmp3lame', '-b:a', '32k'] };
+  try {
+    const f = await cargaFF(log);
+    log('Dividiendo el audio en fragmentos de ' + (cfg.seg >= 60 ? cfg.seg / 60 + ' minutos' : cfg.seg + ' segundos') + '…');
+    for (const n of (await f.listDir('/')).filter(x => !x.isDir && /^out_/.test(x.name))) await f.deleteFile('/' + n.name);
+    let entrada;
+    try { try { await f.unmount('/in'); } catch (e) { } try { await f.createDir('/in'); } catch (e) { } await f.mount('WORKERFS', { files: [file] }, '/in'); entrada = '/in/' + file.name; }
+    catch (e) { entrada = 'entrada'; await f.writeFile(entrada, new Uint8Array(await file.arrayBuffer())); }
+    const onLog = ({ message }) => { const m = /time=(\d+):(\d+):(\d+)/.exec(message); if (m && file.dur) prog(Math.min(1, (+m[1] * 3600 + +m[2] * 60 + +m[3]) / file.dur)); };
+    f.on('log', onLog);
+    const rc = await f.exec(['-hide_banner', '-i', entrada, '-vn', '-ac', '1', '-ar', '16000', ...cfg.args, '-f', 'segment', '-segment_time', String(cfg.seg), '-reset_timestamps', '1', 'out_%04d.' + cfg.ext]);
+    f.off('log', onLog);
+    if (entrada === 'entrada') await f.deleteFile(entrada);
+    const nombres = (await f.listDir('/')).filter(x => !x.isDir && /^out_/.test(x.name)).map(x => x.name).sort();
+    if (rc !== 0 || !nombres.length) throw new Error('No se pudo leer el audio (formato no reconocido).');
+    return { n: nombres.length, seg: cfg.seg, mime: cfg.mime, ext: cfg.ext, leer: async i => new Blob([await f.readFile('/' + nombres[i])], { type: cfg.mime }) };
+  } catch (e) {
+    log('El cortador principal no está disponible (' + e.message + '). Usando el método alterno del navegador…');
+    return cortarWeb(file, motor, log);
+  }
+}
+/** Método alterno: decodifica con el navegador y genera WAV. Sirve hasta ~75 minutos. */
+async function cortarWeb(file, motor, log) {
+  if (file.dur > 75 * 60) throw new Error('El método alterno solo admite audios de hasta 75 minutos. Abre la plataforma desde su dirección web (no como archivo local) para usar el cortador principal.');
+  const seg = motor === 'omni' ? 28 : 240;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  const ctx = new AC(); const buf = await ctx.decodeAudioData(await file.arrayBuffer()); ctx.close();
+  const off = new OfflineAudioContext(1, Math.ceil(buf.duration * 16000), 16000);
+  const src = off.createBufferSource(); src.buffer = buf; src.connect(off.destination); src.start();
+  const pcm = (await off.startRendering()).getChannelData(0);
+  const n = Math.ceil(pcm.length / (seg * 16000));
+  return {
+    n, seg, mime: 'audio/wav', ext: 'wav', leer: async i => {
+      const p = pcm.subarray(i * seg * 16000, Math.min(pcm.length, (i + 1) * seg * 16000));
+      const b = new DataView(new ArrayBuffer(44 + p.length * 2)); const w = (o, s) => [...s].forEach((c, k) => b.setUint8(o + k, c.charCodeAt(0)));
+      w(0, 'RIFF'); b.setUint32(4, 36 + p.length * 2, true); w(8, 'WAVEfmt '); b.setUint32(16, 16, true); b.setUint16(20, 1, true); b.setUint16(22, 1, true);
+      b.setUint32(24, 16000, true); b.setUint32(28, 32000, true); b.setUint16(32, 2, true); b.setUint16(34, 16, true); w(36, 'data'); b.setUint32(40, p.length * 2, true);
+      for (let k = 0; k < p.length; k++) b.setInt16(44 + k * 2, Math.max(-1, Math.min(1, p[k])) * 32767, true);
+      return new Blob([b], { type: 'audio/wav' });
+    }
+  };
+}
+const b64 = blob => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.slice(r.result.indexOf(',') + 1)); r.onerror = rej; r.readAsDataURL(blob); });
+
+/* ------------------------------------------------------- proceso */
+const logEl = $('#log');
+const log = m => { logEl.textContent += (logEl.textContent ? '\n' : '') + m; logEl.scrollTop = logEl.scrollHeight; };
+
+$('#btnRun').onclick = async () => {
+  const L = pAudio.valor()[0];
+  if (!L) return alert('Elige la lengua del audio.');
+  const esEsp = L.code === 'spa';
+  const motor = esEsp ? 'gemini' : ($('input[name=motor]:checked') || {}).value || 'gemini';
+  const cols = [];
+  if (!esEsp && $('#trEsp').checked) cols.push({ key: 'spa', code: 'spa', name: 'Español', variant: '', label: 'Español' });
+  pTrAudio.valor().forEach(d => { if (!(d.code === L.code && !d.variant)) cols.push(d); });
+  PROJ = {
+    v: 1, kind: 'audio', title: $('#titulo').value.trim() || FILE.name, fileName: FILE.name, dur: FILE.dur || 0, lang: L, motor,
+    opts: { mode: $('input[name=modo]:checked').value, anonymize: $('#anon').checked, speakers: +$('#nhab').value || 0 },
+    cols, rows: [], hecho: 0, total: 0, reviewed: false, reviewer: '', reviewDate: '', creado: new Date().toISOString()
+  };
+  TROZOS = null; logEl.textContent = '';
+  await procesar();
+};
+$('#btnPausa').onclick = () => { PAUSA = true; $('#btnPausa').disabled = true; log('Se pausará al terminar el fragmento en curso…'); };
+$('#btnSeguir').onclick = () => procesar();
+
+async function procesar() {
+  if (CORRIENDO) return; CORRIENDO = true; PAUSA = false;
+  $('#prep').hidden = true; $('#progBox').hidden = false; $('#btnSeguir').hidden = true; $('#btnPausa').hidden = false; $('#btnPausa').disabled = false;
+  const bar = $('#prog'), P = PROJ;
+  try {
+    if (!FILE) throw new Error('Vuelve a elegir el archivo de audio "' + P.fileName + '" para continuar.');
+    if (!TROZOS) { $('#progTit').textContent = 'Preparando el audio'; TROZOS = await cortar(FILE, P.motor, log, f => bar.value = f * 100); P.total = TROZOS.n; P.seg = TROZOS.seg; }
+    $('#progTit').textContent = 'Transcribiendo'; pintaEditor(); $('#editor').hidden = false;
+    for (let i = P.hecho; i < TROZOS.n; i++) {
+      if (PAUSA) break;
+      bar.value = i / TROZOS.n * 100;
+      const ini = i * TROZOS.seg;
+      log(`Fragmento ${i + 1} de ${TROZOS.n} (desde ${hms(ini)})…`);
+      const blob = await TROZOS.leer(i);
+      let nuevos = [];
+      if (P.motor === 'omni') {
+        const t = (await espacio(blob, P.lang.omni, 'f.' + TROZOS.ext)).trim();
+        if (t) nuevos = [{ t: ini, speaker: 'P?', text: t, tr: {} }];
+      } else {
+        const labels = [...new Set(P.rows.map(r => r.speaker))];
+        const r = await api('transcribe', { audio: await b64(blob), mime: TROZOS.mime, lang: P.lang, opts: P.opts, context: { labels, prev: P.rows.slice(-3).map(x => ({ speaker: x.speaker, text: x.text })) } });
+        nuevos = r.segments.map(s => ({ t: ini + Math.min(s.t, TROZOS.seg), speaker: s.speaker, text: s.text, tr: {} }));
+      }
+      const desde = P.rows.length;
+      P.rows.push(...nuevos); P.hecho = i + 1;
+      if (P.cols.length && nuevos.length) { try { await traduceFilas(P, P.rows.slice(desde).map((_, k) => desde + k)); } catch (e) { log('La traducción de este fragmento falló (' + e.message + '). Podrás traducirlo después con "Traducir filas pendientes".'); } }
+      agregaFilas(desde); autosave();
+    }
+    if (P.hecho >= TROZOS.n) { bar.value = 100; log('Listo. Revisa el borrador y exporta.'); $('#progBox').hidden = true; if (ff) { try { ff.terminate(); } catch (e) { } ff = null; } }
+    else { log('En pausa.'); $('#btnSeguir').hidden = false; $('#btnPausa').hidden = true; }
+  } catch (e) {
+    log('Se detuvo: ' + e.message + '\nLo ya transcrito está guardado. Pulsa "Reanudar" para continuar desde el fragmento ' + ((P.hecho || 0) + 1) + '.');
+    $('#btnSeguir').hidden = false; $('#btnPausa').hidden = true;
+    if (!P.rows.length && !TROZOS) { $('#prep').hidden = false; }
+  }
+  CORRIENDO = false; pintaCabecera();
+}
+
+/** Traduce las filas indicadas a todas las columnas del proyecto, por lotes. */
+async function traduceFilas(P, idx, avisa) {
+  const texto = P.kind === 'texto';
+  const fuente = texto ? { name: 'Español', code: 'spa' } : { name: P.lang.name, code: P.lang.code, variant: P.lang.variant };
+  const lotes = []; let lote = [], car = 0;
+  for (const i of idx) {
+    const t = P.rows[i].text; if (!t || !t.trim()) continue;
+    if (lote.length >= 25 || car + t.length > 7000) { lotes.push(lote); lote = []; car = 0; }
+    lote.push(i); car += t.length;
+  }
+  if (lote.length) lotes.push(lote);
+  for (let k = 0; k < lotes.length; k++) {
+    avisa && avisa(k, lotes.length);
+    const r = await api('translate', { source: fuente, targets: P.cols.map(c => ({ key: c.key, name: c.name, code: c.code, variant: c.variant })), items: lotes[k].map(i => ({ id: i, text: P.rows[i].text })) });
+    for (const it of r.items) if (P.rows[it.id]) Object.assign(P.rows[it.id].tr, it.tr);
+  }
+  avisa && avisa(lotes.length, lotes.length);
+}
+
+/* --------------------------------------------------------- editor */
+const tabla = $('#tabla');
+function pintaCabecera() {
+  if (!PROJ) return;
+  const P = PROJ;
+  $('#edTit').textContent = P.title;
+  const motor = P.motor === 'omni' ? 'Omnilingual ASR' : P.motor === 'demo' ? 'ejemplo' : 'Gemini';
+  $('#edMeta').textContent = `${P.lang.label || P.lang.name} · ${P.rows.length} turnos · motor: ${motor}` + (P.total && P.hecho < P.total ? ` · avance ${P.hecho} de ${P.total} fragmentos` : '');
+  const labs = [...new Set(P.rows.map(r => r.speaker))];
+  $('#hab').innerHTML = labs.map(l => `<input type="text" value="${esc(l)}" data-lab="${esc(l)}" aria-label="Etiqueta de hablante ${esc(l)}">`).join('') || '<span class="nota">Aún no hay turnos.</span>';
+  const n = P.rows.reduce((a, r) => a + cuentaRojo(r.text) + P.cols.reduce((b, c) => b + cuentaRojo(r.tr[c.key]), 0), 0);
+  $('#pend').textContent = n ? n + (n === 1 ? ' marca en rojo por verificar' : ' marcas en rojo por verificar') : '';
+  $('#btnSig').hidden = !n;
+  $('#btnTrPend').hidden = $('#btnTrTodo').hidden = !P.cols.length || !CFG.api;
+  pintaRevision('audio'); pintaExport('audio');
+}
+function filaHtml(r, i, P) {
+  return `<tr data-i="${i}"><td class="t"><button type="button" title="Ir a este punto del audio">${hms(r.t)}</button></td>
+    <td><input class="sp" type="text" value="${esc(r.speaker)}" aria-label="Hablante"></td>
+    <td><div class="ed" contenteditable="plaintext-only" data-k="text" spellcheck="false">${pinta(r.text)}</div></td>
+    ${P.cols.map(c => `<td><div class="ed tr" contenteditable="plaintext-only" data-k="${esc(c.key)}" spellcheck="false">${pinta(r.tr[c.key] || '')}</div></td>`).join('')}
+    <td><button class="btn min" type="button" data-a="mas" title="Insertar turno debajo">+</button> <button class="btn min" type="button" data-a="menos" title="Borrar turno">×</button></td></tr>`;
+}
+function pintaEditor() {
+  const P = PROJ;
+  tabla.innerHTML = `<thead><tr><th class="t">Tiempo</th><th class="h">Hablante</th><th>Transcripción (${esc(P.lang.name)})</th>${P.cols.map(c => `<th>${esc(c.label)}</th>`).join('')}<th class="x"></th></tr></thead><tbody>${P.rows.map((r, i) => filaHtml(r, i, P)).join('')}</tbody>`;
+  tabla.style.minWidth = (560 + P.cols.length * 300) + 'px';
+  pintaCabecera();
+}
+function agregaFilas(desde) {
+  const P = PROJ; $('tbody', tabla).insertAdjacentHTML('beforeend', P.rows.slice(desde).map((r, k) => filaHtml(r, desde + k, P)).join('')); pintaCabecera();
+}
+tabla.addEventListener('focusin', e => { const d = e.target.closest('.ed'); if (d) { const P = PROJ, r = P.rows[d.closest('tr').dataset.i]; d.textContent = d.dataset.k === 'text' ? r.text : (r.tr[d.dataset.k] || ''); } });
+tabla.addEventListener('focusout', e => {
+  const d = e.target.closest('.ed'), P = PROJ; if (!d) { if (e.target.classList.contains('sp')) { P.rows[e.target.closest('tr').dataset.i].speaker = e.target.value.trim() || 'P?'; pintaCabecera(); autosave(); } return; }
+  const r = P.rows[d.closest('tr').dataset.i], v = d.innerText.replace(/\n+$/, '');
+  if (d.dataset.k === 'text') r.text = v; else r.tr[d.dataset.k] = v;
+  d.innerHTML = pinta(v); pintaCabecera(); autosave();
+});
+tabla.addEventListener('click', e => {
+  const tr = e.target.closest('tr'); if (!tr || !tr.dataset.i) return; const i = +tr.dataset.i, P = PROJ;
+  if (e.target.closest('td.t button')) { const a = $('#player'); if (a.src) { a.currentTime = P.rows[i].t; a.play().catch(() => { }); } }
+  else if (e.target.dataset.a === 'mas') { P.rows.splice(i + 1, 0, { t: P.rows[i].t, speaker: P.rows[i].speaker, text: '', tr: {} }); pintaEditor(); autosave(); }
+  else if (e.target.dataset.a === 'menos') { if (confirm('¿Borrar este turno?')) { P.rows.splice(i, 1); pintaEditor(); autosave(); } }
+});
+$('#hab').addEventListener('change', e => { const o = e.target.dataset.lab, n = e.target.value.trim(); if (!n || n === o) return; PROJ.rows.forEach(r => { if (r.speaker === o) r.speaker = n; }); pintaEditor(); autosave(); });
+$('#btnSig').onclick = () => {
+  const m = $$('.rojo', tabla); if (!m.length) return;
+  const y = window.scrollY + 130, sig = m.find(x => x.getBoundingClientRect().top + window.scrollY > y + 4) || m[0];
+  window.scrollTo({ top: sig.getBoundingClientRect().top + window.scrollY - 130, behavior: 'smooth' }); sig.closest('.ed').focus({ preventScroll: true });
+};
+async function retraduce(todo) {
+  const P = PROJ; if (!P.cols.length) return;
+  const idx = P.rows.map((r, i) => i).filter(i => todo || P.cols.some(c => !P.rows[i].tr[c.key]));
+  if (!idx.length) return alert('No hay filas pendientes de traducir.');
+  if (todo && !confirm('Se reemplazarán las traducciones actuales, incluidas las correcciones hechas a mano. ¿Continuar?')) return;
+  if (todo) idx.forEach(i => P.rows[i].tr = {});
+  $('#progBox').hidden = false; $('#progTit').textContent = 'Traduciendo'; $('#btnPausa').hidden = true; $('#btnSeguir').hidden = true;
+  try { await traduceFilas(P, idx, (k, n) => { $('#prog').value = k / n * 100; }); log('Traducción actualizada.'); $('#progBox').hidden = true; }
+  catch (e) { log('La traducción se detuvo: ' + e.message); }
+  pintaEditor(); autosave();
+}
+$('#btnTrPend').onclick = () => retraduce(false);
+$('#btnTrTodo').onclick = () => retraduce(true);
+$('#btnNuevo').onclick = () => { if (!confirm('Se cerrará este documento. Guárdalo o expórtalo antes. ¿Continuar?')) return; PROJ = null; FILE = null; TROZOS = null; localStorage.removeItem('voces_proj'); $('#editor').hidden = true; $('#progBox').hidden = true; $('#prep').hidden = false; $('#fileInfo').textContent = ''; $('#titulo').value = ''; fileIn.value = ''; pTrAudio.limpiar(); $('#player').removeAttribute('src'); ajustaAudio(); };
+
+function autosave() { if (PROJ && !guardar('voces_proj', PROJ)) console.warn('No se pudo autoguardar (almacenamiento lleno).'); }
+function abreProyecto(P) {
+  if (!P || !Array.isArray(P.rows)) return alert('El archivo no es un proyecto de Voces.');
+  if (P.kind === 'texto') { TX = P; pintaTexto(); irA('texto'); return; }
+  PROJ = P; $('#prep').hidden = true; $('#editor').hidden = false; pintaEditor(); irA('audio');
+  if (P.total && P.hecho < P.total) {
+    $('#progBox').hidden = false; $('#progTit').textContent = 'Transcripción incompleta'; $('#btnPausa').hidden = true; $('#btnSeguir').hidden = false; logEl.textContent = '';
+    log(`Este proyecto quedó en el fragmento ${P.hecho} de ${P.total}. Para continuar, elige de nuevo el archivo "${P.fileName}" y pulsa Reanudar.`);
+    $('#prep').hidden = false;
+  }
+}
+$('#btnAbrir').onclick = () => $('#fileProj').click();
+$('#fileProj').onchange = async e => { const f = e.target.files[0]; if (!f) return; try { abreProyecto(JSON.parse(await f.text())); } catch (x) { alert('No se pudo leer el archivo.'); } e.target.value = ''; };
+
+/* ================================================= revisión y exportación */
+const proyecto = k => k === 'audio' ? PROJ : TX;
+function pintaRevision(k) {
+  const P = proyecto(k), el = $(`[data-revision="${k}"]`); if (!P) { el.innerHTML = ''; return; }
+  if (el.dataset.listo) { $('input[type=checkbox]', el).checked = !!P.reviewed; return; }
+  el.dataset.listo = 1;
+  el.innerHTML = `<div class="card"><h3>Revisión por una persona hablante</h3>
+    <p class="nota">Mientras esta casilla no esté marcada, el documento exportado dirá "Revisión pendiente".</p>
+    <label class="radio"><input type="checkbox"> <span>Una persona hablante de la lengua ya revisó la transcripción y la traducción</span></label>
+    <label class="campo">Nombre de quien revisó</label><input type="text" style="max-width:420px" placeholder="Nombre y comunidad o variante que habla"></div>`;
+  const c = $('input[type=checkbox]', el), n = $('input[type=text]', el);
+  c.checked = !!P.reviewed; n.value = P.reviewer || '';
+  const up = () => { const Q = proyecto(k); Q.reviewed = c.checked; Q.reviewer = n.value.trim(); Q.reviewDate = c.checked ? hoy() : ''; k === 'audio' ? autosave() : guardar('voces_tx', Q); };
+  c.onchange = up; n.oninput = up;
+}
+function pintaExport(k) {
+  const el = $(`[data-export="${k}"]`); if (el.dataset.listo) { $$('[data-g]', el).forEach(b => b.disabled = !CFG.api); $('.sinapi', el).hidden = !!CFG.api; return; }
+  el.dataset.listo = 1;
+  el.innerHTML = `<div class="card suave"><h3>Exportar</h3>
+    <div class="fila" style="margin-top:10px">
+      <button class="btn acc" data-x="word">Word (.docx)</button>
+      <button class="btn acc" data-x="doc" data-g>Google Docs</button>
+      <button class="btn acc" data-x="sheet" data-g>Google Sheets</button>
+      <button class="btn" data-x="json">Guardar proyecto (.json)</button>
+    </div>
+    <p class="nota sinapi">Google Docs y Sheets requieren el backend conectado.</p>
+    <p class="nota res" aria-live="polite"></p></div>`;
+  $$('[data-g]', el).forEach(b => b.disabled = !CFG.api); $('.sinapi', el).hidden = !!CFG.api;
+  el.onclick = async e => {
+    const x = e.target.dataset.x; if (!x) return; const P = proyecto(k), res = $('.res', el);
+    document.activeElement && document.activeElement.blur();
+    try {
+      if (x === 'json') { baja(new Blob([JSON.stringify(P)], { type: 'application/json' }), slug(P.title) + '.voces.json'); res.textContent = 'Proyecto guardado. Ábrelo después con "Abrir proyecto guardado".'; return; }
+      if (x === 'word') { res.textContent = 'Generando Word…'; baja(await aWord(P), slug(P.title) + '.docx'); res.textContent = 'Word descargado.'; return; }
+      if (!CFG.mail && !confirm('No has escrito tu correo en Configuración. El archivo se creará en el Drive de la cuenta que instaló el backend y no se te compartirá. ¿Continuar?')) return;
+      res.textContent = 'Creando el archivo en Google Drive (puede tardar uno o dos minutos en documentos largos)…';
+      const r = await api(x === 'doc' ? 'exportDoc' : 'exportSheet', { project: paraExportar(P), email: CFG.mail }, 1);
+      res.innerHTML = `Listo: <a href="${esc(r.url)}" target="_blank" rel="noopener">abrir ${x === 'doc' ? 'Google Docs' : 'Google Sheets'}</a>`;
+    } catch (err) { res.innerHTML = '<span class="mal">No se pudo exportar: ' + esc(err.message) + '</span>'; }
+  };
+}
+function metaDe(P) {
+  const m = [];
+  if (P.kind === 'audio') {
+    m.push(['Lengua del audio', P.lang.label || P.lang.name]); if (P.fileName) m.push(['Archivo', P.fileName]); if (P.dur) m.push(['Duración', hms(P.dur)]);
+    m.push(['Modo', P.opts && P.opts.mode === 'depurada' ? 'Literal depurada' : 'Literal']);
+    m.push(['Motor', P.motor === 'omni' ? 'Omnilingual ASR (Meta)' : P.motor === 'demo' ? 'Ejemplo' : 'Gemini (Google)']);
+  } else m.push(['Lengua de origen', 'Español']);
+  if (P.cols.length) m.push(['Traducción a', P.cols.map(c => c.label).join('; ')]);
+  m.push(['Fecha', hoy()]);
+  return m;
+}
+const paraExportar = P => ({ title: P.title, kind: P.kind, lang: { name: P.lang ? P.lang.name : 'Español' }, cols: P.cols.map(c => ({ key: c.key, label: c.label })), rows: P.rows.map(r => ({ t: r.t, speaker: r.speaker, text: r.text, tr: r.tr })), reviewed: P.reviewed, reviewer: P.reviewer, reviewDate: P.reviewDate, meta: metaDe(P) });
+const revisionTxt = P => P.reviewed ? 'Revisión por persona hablante: realizada por ' + (P.reviewer || 'sin nombre registrado') + (P.reviewDate ? ' el ' + P.reviewDate : '') + '.' : 'Revisión por persona hablante: PENDIENTE.';
+function baja(blob, nombre) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
+
+async function aWord(P) {
+  const D = window.docx, F = 'Times New Roman', ROJO = 'D4111E', MOR = '6B21F5';
+  const trozos = (t, extra = {}) => {
+    const out = []; let u = 0; t = String(t || '');
+    t.replace(RE_ROJO, (m, o) => { if (o > u) out.push(new D.TextRun({ text: t.slice(u, o), font: F, size: 24, ...extra })); out.push(new D.TextRun({ text: m, font: F, size: 24, ...extra, color: ROJO, bold: true })); u = o + m.length; return m; });
+    if (u < t.length) out.push(new D.TextRun({ text: t.slice(u), font: F, size: 24, ...extra }));
+    return out;
+  };
+  const ch = [
+    new D.Paragraph({ spacing: { after: 60 }, children: [new D.TextRun({ text: P.title, font: 'Montserrat', bold: true, size: 40, color: MOR })] }),
+    new D.Paragraph({ spacing: { after: 200 }, children: [new D.TextRun({ text: '——', bold: true, color: MOR, size: 28 }), new D.TextRun({ text: ' · ', bold: true, color: 'FF6B1A', size: 28 }), new D.TextRun({ text: '——', bold: true, color: MOR, size: 28 })] }),
+    ...metaDe(P).map(([a, b]) => new D.Paragraph({ children: [new D.TextRun({ text: a + ': ', bold: true, font: F, size: 20 }), new D.TextRun({ text: String(b), font: F, size: 20 })] })),
+    new D.Paragraph({ spacing: { before: 200, after: 120 }, children: [new D.TextRun({ text: AVISO + ' ' + revisionTxt(P), italics: true, color: ROJO, font: F, size: 20 })] }),
+    new D.Paragraph({ spacing: { after: 300 }, children: [new D.TextRun({ text: CONVENCIONES, color: '555555', font: F, size: 18 })] })
+  ];
+  for (const r of P.rows) {
+    const pre = P.kind === 'audio' ? [new D.TextRun({ text: `[${hms(r.t)}] ${r.speaker}: `, bold: true, font: F, size: 24 })] : [];
+    ch.push(new D.Paragraph({ spacing: { before: 160, after: 60, line: 320 }, children: [...pre, ...trozos(r.text)] }));
+    for (const c of P.cols) {
+      const v = r.tr[c.key]; if (!v) continue;
+      ch.push(new D.Paragraph({ indent: { left: 560 }, spacing: { after: 60, line: 320 }, children: [new D.TextRun({ text: c.label + ': ', bold: true, italics: true, color: MOR, font: F, size: 24 }), ...trozos(v, { italics: true })] }));
+    }
+  }
+  const doc = new D.Document({ creator: 'Voces · Sintropía Social', title: P.title, sections: [{ properties: { page: { margin: { top: 1418, bottom: 1418, left: 1418, right: 1418 } } }, children: ch }] });
+  return D.Packer.toBlob(doc);
+}
+
+/* ================================================================== texto */
+let TX = null;
+const pTexto = selector($('#pickTexto'), { modo: 'varios', alCambiar: ajustaTexto });
+function ajustaTexto() {
+  const ok = CFG.api && $('#txIn').value.trim() && pTexto.valor().length;
+  $('#btnTx').disabled = !ok;
+  $('#txHint').textContent = !CFG.api ? 'Conecta el backend en Configuración para traducir.' : !$('#txIn').value.trim() ? 'Escribe el texto en español.' : !pTexto.valor().length ? 'Elige al menos una lengua de destino.' : '';
+}
+$('#txIn').oninput = ajustaTexto;
+$('#btnTx').onclick = async () => {
+  const parrafos = $('#txIn').value.split(/\n+/).map(s => s.trim()).filter(Boolean);
+  TX = { v: 1, kind: 'texto', title: $('#txTitulo').value.trim() || 'Traducción ' + hoy(), cols: pTexto.valor(), rows: parrafos.map(t => ({ text: t, tr: {} })), reviewed: false, reviewer: '', reviewDate: '' };
+  $('#txProg').hidden = false; $('#txLog').textContent = 'Traduciendo…'; $('#btnTx').disabled = true;
+  try { await traduceFilas(TX, TX.rows.map((_, i) => i), (k, n) => { $('#txBar').value = k / n * 100; $('#txLog').textContent = `Lote ${Math.min(k + 1, n)} de ${n}…`; }); $('#txProg').hidden = true; }
+  catch (e) { $('#txLog').textContent = 'La traducción se detuvo: ' + e.message + ' Lo ya traducido se conserva abajo.'; }
+  $('#btnTx').disabled = false; guardar('voces_tx', TX); pintaTexto();
+};
+function pintaTexto() {
+  const P = TX; if (!P) return;
+  $('#txOut').hidden = false;
+  const t = $('#txTabla');
+  t.innerHTML = `<thead><tr><th>Español</th>${P.cols.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr></thead><tbody>` +
+    P.rows.map((r, i) => `<tr data-i="${i}"><td><div class="ed" contenteditable="plaintext-only" data-k="text">${pinta(r.text)}</div></td>${P.cols.map(c => `<td><div class="ed tr" contenteditable="plaintext-only" data-k="${esc(c.key)}" spellcheck="false">${pinta(r.tr[c.key] || '')}</div></td>`).join('')}</tr>`).join('') + '</tbody>';
+  t.style.minWidth = (320 + P.cols.length * 320) + 'px';
+  pintaRevision('texto'); pintaExport('texto');
+}
+$('#txTabla').addEventListener('focusin', e => { const d = e.target.closest('.ed'); if (d) { const r = TX.rows[d.closest('tr').dataset.i]; d.textContent = d.dataset.k === 'text' ? r.text : (r.tr[d.dataset.k] || ''); } });
+$('#txTabla').addEventListener('focusout', e => { const d = e.target.closest('.ed'); if (!d) return; const r = TX.rows[d.closest('tr').dataset.i], v = d.innerText.replace(/\n+$/, ''); if (d.dataset.k === 'text') r.text = v; else r.tr[d.dataset.k] = v; d.innerHTML = pinta(v); guardar('voces_tx', TX); });
+
+/* =========================================================== configuración */
+function pintaCfg() {
+  $('#cApi').value = CFG.api; $('#cCode').value = CFG.code; $('#cMail').value = CFG.mail; $('#cSpace').value = CFG.space; $('#cSpaceCode').value = CFG.spaceCode;
+  $('#demo').hidden = !!CFG.api;
+  ajustaAudio(); ajustaTexto(); if (PROJ) pintaCabecera(); if (TX) pintaExport('texto');
+}
+function tomaCfg() {
+  CFG.api = $('#cApi').value.trim(); CFG.code = $('#cCode').value; CFG.mail = $('#cMail').value.trim(); CFG.space = $('#cSpace').value.trim().replace(/\/+$/, ''); CFG.spaceCode = $('#cSpaceCode').value;
+  guardar('voces_cfg', CFG); pintaCfg();
+}
+$('#cProbar').onclick = async () => {
+  tomaCfg(); const r = $('#cRes'); if (!CFG.api) { r.innerHTML = '<span class="mal">Escribe la URL.</span>'; return; }
+  r.textContent = 'Probando…';
+  try { const j = await api('ping', {}, 1); r.innerHTML = `<span class="ok">Conectado.</span> Modelo en uso: ${esc(j.modelo)}.`; }
+  catch (e) { r.innerHTML = '<span class="mal">No conecta: ' + esc(e.message) + '</span>'; }
+};
+$('#cProbarS').onclick = async () => {
+  tomaCfg(); const r = $('#cResS'); if (!CFG.space) { r.textContent = 'Sin servidor de lenguas.'; return; }
+  r.textContent = 'Probando (si el servidor estaba dormido puede tardar unos minutos)…';
+  try { const j = await (await fetch(CFG.space + '/health')).json(); r.innerHTML = j.ready ? `<span class="ok">Conectado.</span> Modelo: ${esc(j.model)}.` : 'El servidor está cargando el modelo. Intenta de nuevo en unos minutos.'; }
+  catch (e) { r.innerHTML = '<span class="mal">No responde: ' + esc(e.message) + '</span>'; }
+};
+
+/* ================================================================= ejemplo */
+$('#btnDemo').onclick = () => {
+  abreProyecto({
+    v: 1, kind: 'audio', title: 'Ejemplo — entrevista sobre organización comunitaria', fileName: '', dur: 95, motor: 'demo',
+    lang: { code: 'spa', name: 'Español', label: 'Español' }, opts: { mode: 'literal' }, cols: [], hecho: 1, total: 1, reviewed: false, reviewer: '', reviewDate: '',
+    rows: [
+      { t: 0, speaker: 'E1', text: 'Bueno, pues (.) gracias por recibirnos. Para empezar, ¿nos puede contar cómo se organizaron al principio?', tr: {} },
+      { t: 9, speaker: 'P1', text: 'Sí, este:: (..) pues mire, al principio éramos pocas, éramos como (¿ocho?) nada más, y nos juntábamos en la casa de [NOMBRE].', tr: {} },
+      { t: 24, speaker: 'P1', text: 'Luego ya se fue sumando más gente porque vieron que SÍ funcionaba, que no era nomás de- de palabra ((risas)).', tr: {} },
+      { t: 37, speaker: 'E1', text: '¿Y las decisiones cómo las // tomaban?', tr: {} },
+      { t: 40, speaker: 'P2', text: '// En asamblea. Todo en asamblea, eso desde el principio lo dijimos. Aunque tardáramos (3) pero entre todas.', tr: {} },
+      { t: 55, speaker: 'P1', text: 'Ajá, y cuando vino lo de [inaudible] ahí sí estuvo difícil, porque no todas estaban de acuerdo con el comisariado.', tr: {} },
+      { t: 71, speaker: 'P2', text: 'Pero se habló. Se habló y quedó en acta, ahí está en el libro, en (¿marzo?) creo que fue.', tr: {} },
+      { t: 84, speaker: 'E1', text: 'Qué interesante. ¿Y ese libro lo conservan ustedes?', tr: {} }
+    ]
+  });
+};
+
+/* ================================================================== inicio */
+pintaCfg();
+(function restaura() {
+  const p = leer('voces_proj'); if (p && p.rows && p.rows.length && p.motor !== 'demo') abreProyecto(p), irA('audio');
+  const t = leer('voces_tx'); if (t && t.rows && t.rows.length) { TX = t; pintaTexto(); }
+})();
+window.addEventListener('beforeunload', e => { if (CORRIENDO) { e.preventDefault(); e.returnValue = ''; } });
+</script>
+</body>
+</html>
